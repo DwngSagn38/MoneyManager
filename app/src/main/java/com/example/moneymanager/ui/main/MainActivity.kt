@@ -20,7 +20,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun viewListener() {
-        binding.setting.tap { showActivity(SettingActivity::class.java) }
     }
 
     override fun dataObservable() {
