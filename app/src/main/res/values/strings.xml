@@ -38,4 +38,8 @@
     <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete?</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="budget_planner">BUDGET PLANNER</string>
+    <string name="loans">Loans</string>
+    <string name="expenses">Expenses</string>
+    <string name="income">Income</string>
 </resources>
