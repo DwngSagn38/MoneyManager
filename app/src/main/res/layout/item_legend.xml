@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/viewColor"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="8dp"/>
+    <TextView
+        android:id="@+id/tvLegendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/annual_report"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:fontFamily="@font/opensans_700"
+        android:layout_marginTop="13dp"/>
+
+    <TextView
+        android:id="@+id/tvLegendPercent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/annual_report"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:fontFamily="@font/opensans_700"
+        android:layout_marginTop="13dp"/>
+</LinearLayout>

@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="11dp"
         android:layout_marginTop="6dp"
-        android:drawableStart="@drawable/ic_calendar"
+        android:drawableStart="@drawable/ic_calendar1"
         android:drawablePadding="7dp"
         android:fontFamily="@font/opensans_600"
         android:gravity="center"
