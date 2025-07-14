@@ -13,6 +13,7 @@
     <color name="color_EEEEEE">#EEEEEE</color>
     <color name="color_1E232E">#1E232E</color>
     <color name="color_555555">#555555</color>
+    <color name="color_B4B4B4">#B4B4B4</color>
     <color name="color_BCBCBC">#BCBCBC</color>
     <color name="color_6AB6EA">#6AB6EA</color>
     <color name="color_D0E8FF">#D0E8FF</color>
@@ -30,8 +31,8 @@
 
     <color name="red">#DE2525</color>
     <color name="green">#12AD0F</color>
-    <color name="main">#2BB2EC</color>
-    <color name="primary">#E7F6FF</color>
+    <color name="main">#3368EE</color>
+    <color name="primary">#232059</color>
 
     <color name="text_item">#4F4F4F</color>
 

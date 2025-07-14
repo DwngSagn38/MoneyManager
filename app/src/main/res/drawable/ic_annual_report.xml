@@ -10,25 +10,32 @@
       <clip-path
           android:pathData="M24,0H0V24H24V0Z"/>
       <path
-          android:pathData="M10.49,2.231L5.5,4.111C4.35,4.541 3.41,5.901 3.41,7.121V14.55C3.41,15.731 4.19,17.281 5.14,17.99L9.44,21.201C10.85,22.26 13.17,22.26 14.58,21.201L18.88,17.99C19.83,17.281 20.61,15.731 20.61,14.55V7.121C20.61,5.891 19.67,4.531 18.52,4.101L13.53,2.231C12.68,1.921 11.32,1.921 10.49,2.231Z"
+          android:pathData="M10.11,11.149H7.46C6.83,11.149 6.32,11.659 6.32,12.289V17.409H10.11V11.149Z"
           android:strokeLineJoin="round"
           android:strokeWidth="1.5"
           android:fillColor="#00000000"
-          android:strokeColor="#DBE5F0"
+          android:strokeColor="#ffffff"
           android:strokeLineCap="round"/>
       <path
-          android:pathData="M12,12.5C13.105,12.5 14,11.605 14,10.5C14,9.395 13.105,8.5 12,8.5C10.895,8.5 10,9.395 10,10.5C10,11.605 10.895,12.5 12,12.5Z"
+          android:pathData="M12.761,6.6H11.241C10.611,6.6 10.101,7.11 10.101,7.74V17.4H13.891V7.74C13.891,7.11 13.391,6.6 12.761,6.6Z"
           android:strokeLineJoin="round"
           android:strokeWidth="1.5"
           android:fillColor="#00000000"
-          android:strokeColor="#DBE5F0"
+          android:strokeColor="#ffffff"
           android:strokeLineCap="round"/>
       <path
-          android:pathData="M12,12.5V15.5"
+          android:pathData="M16.548,12.85H13.898V17.4H17.688V13.99C17.678,13.36 17.168,12.85 16.548,12.85Z"
           android:strokeLineJoin="round"
           android:strokeWidth="1.5"
           android:fillColor="#00000000"
-          android:strokeColor="#DBE5F0"
+          android:strokeColor="#ffffff"
+          android:strokeLineCap="round"/>
+      <path
+          android:pathData="M9,22H15C20,22 22,20 22,15V9C22,4 20,2 15,2H9C4,2 2,4 2,9V15C2,20 4,22 9,22Z"
+          android:strokeLineJoin="round"
+          android:strokeWidth="1.5"
+          android:fillColor="#00000000"
+          android:strokeColor="#ffffff"
           android:strokeLineCap="round"/>
     </group>
   </group>
