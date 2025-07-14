@@ -28,9 +28,15 @@
     <string name="close">close</string>
     <string name="rate_us">Rate us</string>
     <string name="feedback">Feedback</string>
-    <string name="share">Share</string>
+    <string name="version">Version</string>
+    <string name="version_app">1.0.0</string>
+    <string name="share">Share App</string>
     <string name="policy">Policy</string>
+    <string name="annual_category_report">Annual Category Report</string>
+    <string name="annual_report">Annual Report</string>
     <string name="sound">Sound</string>
+    <string name="currency">Currency</string>
+    <string name="converter">Converter</string>
     <string name="may_be_later">May be later</string>
     <string name="next">Next</string>
     <string name="start">Start</string>
