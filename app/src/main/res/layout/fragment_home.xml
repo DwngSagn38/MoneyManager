@@ -55,8 +55,48 @@
             android:scaleType="fitXY"
             android:src="@drawable/bg_available_balance"
             app:layout_constraintTop_toBottomOf="@+id/iv1" />
+        <TextView
+            android:id="@+id/tvNameWallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/available_balance"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/opensans_600"
+            app:layout_constraintTop_toTopOf="@id/iv2"
+            app:layout_constraintStart_toStartOf="@+id/iv2"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="18dp"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgVisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_eye_visible"
+            app:layout_constraintTop_toTopOf="@+id/tvNameWallet"
+            app:layout_constraintBottom_toBottomOf="@+id/tvNameWallet"
+            app:layout_constraintEnd_toEndOf="@+id/iv2"
+            android:layout_marginEnd="12dp"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toTopOf="@+id/cl_center"
+            android:layout_marginTop="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_bg_fragment_home"
+            android:layout_weight="1">
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/cl_center"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_center"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:layout_marginHorizontal="13dp"
@@ -102,7 +142,33 @@
                     android:textColor="@color/color_B1C7FF"/>
             </LinearLayout>
 
+            <LinearLayout
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+              <ImageView
+                  android:id="@+id/iv_expenses"
+                  android:src="@drawable/hover"
+                  android:layout_width="71dp"
+                  android:layout_weight="1"
+                  android:layout_height="27dp"/>
+                <ImageView
+                    android:id="@+id/iv_income"
+                    android:src="@drawable/hover"
+                    android:layout_width="71dp"
+                    android:layout_weight="1"
+                    android:layout_height="27dp"/>
+                <ImageView
+                    android:id="@+id/iv_loans"
+                    android:src="@drawable/hover"
+                    android:layout_width="71dp"
+                    android:layout_weight="1"
+                    android:layout_height="27dp"/>
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
