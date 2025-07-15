@@ -12,6 +12,7 @@ import com.example.moneymanager.ui.language_start.LanguageStartActivity
 import com.example.moneymanager.R
 import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.databinding.ActivitySplashBinding
+import com.example.moneymanager.ui.main.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -42,7 +43,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     }
 
     private fun startIntro() {
-        showActivity(LanguageStartActivity::class.java)
+        showActivity(MainActivity::class.java)
         finish()
     }
 
