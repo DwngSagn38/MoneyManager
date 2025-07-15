@@ -15,22 +15,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
 import com.example.moneymanager.model.ExpenseCategory
 
-class ExpenseAdapter(private val list: List<ExpenseCategory>) :
-    RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
+class Expense1Adapter(private val list: List<ExpenseCategory>) :
+    RecyclerView.Adapter<Expense1Adapter.ViewHolder>() {
 
     // Tính tổng chi tiêu để dùng cho progress
     private val totalAmount = list.sumOf { it.amount.toDouble() }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgIcon: ImageView = itemView.findViewById(R.id.imgIcon)
-        val tvName: TextView = itemView.findViewById(R.id.tvName)
+        val viewColor: View = itemView.findViewById(R.id.viewColor)
+        val tvLegendName: TextView = itemView.findViewById(R.id.tvLegendName)
         val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
-        val tvAmount: TextView = itemView.findViewById(R.id.tvAmount)
+        val tvLegendPercent: TextView = itemView.findViewById(R.id.tvLegendPercent)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_expense, parent, false)
+            .inflate(R.layout.item_expense1, parent, false)
         return ViewHolder(view)
     }
 
@@ -38,13 +38,17 @@ class ExpenseAdapter(private val list: List<ExpenseCategory>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
-        holder.tvName.text = item.name
-        holder.tvAmount.text = "$${item.amount.toInt()}"
-        holder.imgIcon.setImageResource(item.iconRes)
+        holder.tvLegendName.text = item.name
+        val circleDrawable = GradientDrawable().apply {
+            shape = GradientDrawable.OVAL
+            setColor(item.color)
+        }
+        holder.viewColor.background = circleDrawable
+
 
         val total = list.sumOf { it.amount.toDouble() }
         holder.progressBar.progress = ((item.amount / total) * 100).toInt()
-
+        holder.tvLegendPercent.text = "${"%.0f".format((item.amount / 1260f) * 100)}%"
         // Tạo progressDrawable động
         val backgroundDrawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
