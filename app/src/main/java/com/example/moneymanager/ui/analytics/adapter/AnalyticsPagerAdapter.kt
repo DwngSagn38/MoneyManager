@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui.analytics
+package com.example.moneymanager.ui.analytics.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

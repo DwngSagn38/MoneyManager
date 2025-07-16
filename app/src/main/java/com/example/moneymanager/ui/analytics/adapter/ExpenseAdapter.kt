@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui.analytics
+package com.example.moneymanager.ui.analytics.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.ClipDrawable
@@ -13,7 +13,6 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
-import com.example.moneymanager.model.ExpenseCategory
 import com.example.moneymanager.model.TransactionEntity
 
 class ExpenseAdapter(private var list: List<TransactionEntity>) :

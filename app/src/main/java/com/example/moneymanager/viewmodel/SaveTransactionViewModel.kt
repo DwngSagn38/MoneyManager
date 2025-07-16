@@ -30,7 +30,6 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
 
     init {
         fetchAllTransactions()
-
     }
 
     private val _expenses = MutableStateFlow<List<TransactionEntity>>(emptyList())
@@ -42,9 +41,20 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
     private val _incomes = MutableStateFlow<List<TransactionEntity>>(emptyList())
     val incomes: StateFlow<List<TransactionEntity>> = _incomes
 
+    private val _totalIncomes = MutableStateFlow(0f)
+    val totalIncomes: StateFlow<Float> = _totalIncomes
+
     private val _loans = MutableStateFlow<List<TransactionEntity>>(emptyList())
     val loans: StateFlow<List<TransactionEntity>> = _loans
 
+    private val _totalLoans = MutableStateFlow(0f)
+    val totalLoans: StateFlow<Float> = _totalLoans
+
+    private val _totalBorrowed = MutableStateFlow(0f)
+    val totalBorrowed: StateFlow<Float> = _totalBorrowed
+
+    private val _totalBalance = MutableStateFlow(0f)
+    val totalBalance: StateFlow<Float> = _totalBalance
 
     fun saveTransaction(transaction: TransactionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -105,8 +115,15 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
                     _expenses.value = list
                     _totalExpenses.value = list.sumOf { it.amount.toDouble() }.toFloat()
                 }
-                "Income" -> _incomes.value = list
-                "Loan" -> _loans.value = list
+                "Income" -> {
+                    _incomes.value = list
+                    _totalIncomes.value = list.sumOf { it.amount.toDouble() }.toFloat()
+                }
+                "Loan" -> {
+                    _loans.value = list
+                    _totalLoans.value = list.filter { it.id == 35 }.sumOf { it.amount.toDouble() }.toFloat()
+                    _totalBorrowed.value = list.filter { it.id == 34 }.sumOf { it.amount.toDouble() }.toFloat()
+                }
             }
         }
     }

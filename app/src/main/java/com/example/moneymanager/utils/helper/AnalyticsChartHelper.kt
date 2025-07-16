@@ -7,10 +7,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanager.R
 import com.example.moneymanager.databinding.FragmentExpenseAnalyticBinding
-import com.example.moneymanager.model.ExpenseCategory
 import com.example.moneymanager.model.TransactionEntity
-import com.example.moneymanager.ui.analytics.Expense1Adapter
-import com.example.moneymanager.ui.analytics.ExpenseAdapter
+import com.example.moneymanager.ui.analytics.adapter.Expense1Adapter
+import com.example.moneymanager.ui.analytics.adapter.ExpenseAdapter
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter

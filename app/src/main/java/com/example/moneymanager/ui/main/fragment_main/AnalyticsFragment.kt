@@ -8,8 +8,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.moneymanager.R
 import com.example.moneymanager.databinding.FragmentAnalyticsBinding
 import com.example.moneymanager.dialog.MonthYearPickerDialog
-import com.example.moneymanager.ui.analytics.AnalyticsPagerAdapter
-import com.example.moneymanager.ui.analytics.SharedAnalyticsViewModel
+import com.example.moneymanager.ui.analytics.adapter.AnalyticsPagerAdapter
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
@@ -25,6 +24,7 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
     private var selectedMonth = 0
     private var selectedYear = 0
     private var sortByYear = false
+    private var isVisible = false
     private lateinit var adapter: AnalyticsPagerAdapter
     private lateinit var viewModel: SaveTransactionViewModel
 
@@ -72,6 +72,17 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
                 viewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
             }
             dialog.show()
+        }
+
+        binding.imgVisible.setOnClickListener{
+            isVisible = !isVisible
+            if (isVisible) {
+                binding.tvBalance.text = "$56,534.8"
+                binding.imgVisible.setImageResource(R.drawable.ic_eye_invisible)
+            } else {
+                binding.tvBalance.text = getString(R.string.invisible_balance)
+                binding.imgVisible.setImageResource(R.drawable.ic_eye_visible)
+            }
         }
     }
 
