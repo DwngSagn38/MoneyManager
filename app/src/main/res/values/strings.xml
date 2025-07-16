@@ -53,4 +53,12 @@
     <string name="invisible_balance">*******</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="choose_a_category">Choose a category</string>
+    <string name="add_expense">Add Expense</string>
+
+    <string name="error_missing_category">Missing category data!</string>
+    <string name="error_empty_note">Please enter a note!</string>
+    <string name="error_empty_amount">Please enter an amount!</string>
+    <string name="success_transaction_saved">Transaction saved successfully!</string>
+
 </resources>

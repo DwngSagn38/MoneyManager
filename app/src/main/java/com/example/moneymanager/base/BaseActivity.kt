@@ -1,7 +1,6 @@
 package com.example.moneymanager.base
 
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.ActivityInfo
@@ -12,21 +11,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.viewbinding.ViewBinding
+import com.example.moneymanager.R
+import com.example.moneymanager.model.Category
 import com.example.moneymanager.utils.SystemUtil
 import com.example.moneymanager.view.dialog.PermissionDialog
 import java.util.Locale
@@ -237,6 +235,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         startActivity(intent)
     }
 
+
     // Chuyển đến Activity khác không cần bundle
     fun showActivity(activity: Class<*>) {
         val intent = Intent(this, activity)
@@ -313,4 +312,54 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         var checkChooseLocation: Int? = null
         var checkPin:Int? = null
     }
+    fun getCatagoryList(int: Int): List<Category> {
+        val categoryList = when(int) {
+            1-> ListExpenses
+            2-> incomeCategories
+            else -> loansCategory
+        }
+        return categoryList
+    }
+    val ListExpenses = listOf(
+        Category(1, "Social", "Expense", R.drawable.ic_social),
+        Category(2, "Pets", "Expense", R.drawable.ic_pets),
+        Category(3, "Shopping", "Expense", R.drawable.ic_shopping),
+        Category(4, "Food & Dining", "Expense", R.drawable.ic_food_and_drink),
+        Category(5, "Transportation", "Expense", R.drawable.ic_transportation),
+        Category(6, "Groceries", "Expense", R.drawable.ic_groceries),
+        Category(7, "Education", "Expense", R.drawable.ic_education),
+        Category(8, "Bills & Utilities", "Expense", R.drawable.ic_bills_and_utilites),
+        Category(9, "Housing", "Expense", R.drawable.ic_housing),
+        Category(10, "Healthcare", "Expense", R.drawable.ic_healthcare),
+        Category(11, "Investments", "Expense", R.drawable.ic_investment_income),
+        Category(12, "Beauty", "Expense", R.drawable.ic_beauty),
+        Category(13, "Children", "Expense", R.drawable.ic_children),
+        Category(14, "Gifts", "Expense", R.drawable.ic_gifts),
+        Category(15, "Sports", "Expense", R.drawable.ic_sports),
+        Category(16, "Gym", "Expense", R.drawable.ic_gym),
+        Category(17, "Tobacco", "Expense", R.drawable.ic_tobacco),
+        Category(18, "Drinks", "Expense", R.drawable.ic_drinks),
+        Category(19, "Travel", "Expense", R.drawable.ic_travel),
+        Category(20, "Donations", "Expense", R.drawable.ic_donations),
+        Category(21, "Lottery", "Expense", R.drawable.ic_lottery),
+        Category(22, "Transit", "Expense", R.drawable.ic_transit),
+        Category(23, "Electronics", "Expense", R.drawable.ic_electronics),
+        Category(24, "Books", "Expense", R.drawable.ic_books),
+        Category(25, "Other", "Expense", R.drawable.ic_other)
+    )
+    val incomeCategories = listOf(
+        Category(26, "Salary", "Income", R.drawable.ic_salary),
+        Category(27, "Allowance", "Income", R.drawable.ic_allowance),
+        Category(28, "Awards", "Income", R.drawable.ic_awards),
+        Category(29, "Investments", "Income", R.drawable.ic_investment_income),
+        Category(30, "Business", "Income", R.drawable.ic_business),
+        Category(31, "Interest Income", "Income", R.drawable.ic_interest_income),
+        Category(32, "Extra Income", "Income", R.drawable.ic_extra_income),
+        Category(33, "Other", "Income", R.drawable.ic_other)
+    )
+    val loansCategory = listOf(
+        Category(34,"Debt","Loans", R.drawable.ic_debt),
+        Category(35,"Loans","Loans", R.drawable.ic_loans3)
+    )
+
 }
