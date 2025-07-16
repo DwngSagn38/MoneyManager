@@ -19,6 +19,7 @@ import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 
 class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
     private val viewModel: SaveTransactionViewModel by viewModels()
+    private var check: Boolean = true
 
     override fun setViewBinding(): ActivitySaveTransactionBinding {
         return ActivitySaveTransactionBinding.inflate(layoutInflater)
@@ -30,6 +31,12 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
         if (category != null) {
             binding.ivDisplay.setImageResource(category.imgResId)
             binding.tvName.text = category.name
+            if (category.name == "Borrowed") {
+                check = false
+            }
+            if (category.type == "Expense") {
+                check = false
+            }
         }
 
         val white = Color.parseColor("#FFFFFF")
@@ -149,6 +156,7 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
                 amount = amount.toFloat(),
                 type = category.type,
                 color = category.color,
+                check = check
             )
 
             viewModel.saveTransaction(transaction)

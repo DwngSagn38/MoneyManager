@@ -22,7 +22,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:fontFamily="@font/opensans_600"
-        android:text="Total Income"
+        android:text="@string/total_income"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="@id/iv1"
         app:layout_constraintBottom_toBottomOf="@id/iv1"
         android:layout_marginEnd="17dp"
-        android:textColor="#FF0000"
+        android:textColor="#00FF6F"
         android:fontFamily="@font/opensans_700"/>
 
     <androidx.recyclerview.widget.RecyclerView

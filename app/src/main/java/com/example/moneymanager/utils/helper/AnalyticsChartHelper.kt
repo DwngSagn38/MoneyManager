@@ -140,7 +140,8 @@ object AnalyticsChartHelper {
                     amount = group.sumOf { it.amount.toDouble() }.toFloat(),
                     type = first.type,
                     idCategory = first.idCategory,
-                    color = first.color
+                    color = first.color,
+                    check = first.check
                 )
             }
     }

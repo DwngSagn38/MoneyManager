@@ -51,6 +51,9 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
     private val _totalLoans = MutableStateFlow(0f)
     val totalLoans: StateFlow<Float> = _totalLoans
 
+    private val _totalBorrowed = MutableStateFlow(0f)
+    val totalBorrowed: StateFlow<Float> = _totalBorrowed
+
     fun saveTransaction(transaction: TransactionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             dao.insertTransaction(transaction)
@@ -114,9 +117,10 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
                     _incomes.value = list
                     _totalIncome.value = list.sumOf { it.amount.toDouble() }.toFloat()
                 }
-                "Loan" ->{
+                "Loans" ->{
                     _loans.value = list
-                    _totalLoans.value = list.sumOf { it.amount.toDouble() }.toFloat()
+                    _totalLoans.value = list.filter { it.check == true }.sumOf { it.amount.toDouble() }.toFloat()
+                    _totalBorrowed.value = list.filter { it.check == false }.sumOf { it.amount.toDouble() }.toFloat()
                 }
             }
         }

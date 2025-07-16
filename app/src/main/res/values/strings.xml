@@ -68,5 +68,7 @@
     <string name="month">Month</string>
     <string name="this_month">This month</string>
     <string name="this_year">This year</string>
+    <string name="total_income">Total Income</string>
+    <string name="money_borrowed">Money Borrowed</string>
 
 </resources>

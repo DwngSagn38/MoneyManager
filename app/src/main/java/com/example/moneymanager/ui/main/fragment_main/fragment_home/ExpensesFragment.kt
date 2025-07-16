@@ -24,7 +24,7 @@ class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
     }
 
     override fun initView() {
-        adapter = ExpensesAdapter(emptyList())
+        adapter = ExpensesAdapter(emptyList(),false)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 

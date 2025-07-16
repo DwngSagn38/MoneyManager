@@ -23,7 +23,7 @@ class IncomeFragment:BaseFragment<FragmentIncomeBinding>() {
     }
 
     override fun initView() {
-        adapter = ExpensesAdapter(emptyList())
+        adapter = ExpensesAdapter(emptyList(),true)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 

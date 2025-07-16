@@ -359,7 +359,7 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         Category(33, "Other", "Income", R.drawable.ic_other,  Color.parseColor("#BB52EF"))
     )
     val loansCategory = listOf(
-        Category(34,"Debt","Loans", R.drawable.ic_debt,  Color.parseColor("#CB41C8")),
+        Category(34,"Borrowed","Loans", R.drawable.ic_debt,  Color.parseColor("#CB41C8")),
         Category(35,"Loans","Loans", R.drawable.ic_loans3,  Color.parseColor("#EF5267"))
     )
 

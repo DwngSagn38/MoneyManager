@@ -1,5 +1,6 @@
 package com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,11 @@ import com.example.moneymanager.databinding.ItemTransitionMainBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
 
 class ExpensesAdapter(
-    private var items: List<ExpenseListItem>
+    private var items: List<ExpenseListItem>,
+    private var check: Boolean?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -26,15 +29,32 @@ class ExpensesAdapter(
             val outputFormat = SimpleDateFormat("EEE, MMM dd", Locale.getDefault())
             val date = inputFormat.parse(header.date)
             val formattedDate = outputFormat.format(date!!)
-
             binding.tvDate.text = formattedDate
-            binding.tvTotalAmount.text = "${header.totalAmount} $"
-
-            // Nếu là phần tử đầu tiên thì ẩn divider
+            if (check == true) {
+                if (header.totalAmount < 0) {
+                    binding.tvTotalAmount.setTextColor(Color.parseColor("#FF2E2E"))
+                    val amount = abs(header.totalAmount)
+                    val formatted = if (amount % 1.0 == 0.0) {
+                        "-$${amount.toInt()}"
+                    } else {
+                        "-$${String.format("%.2f", amount)}"
+                    }
+                    binding.tvTotalAmount.text = formatted
+                } else {
+                    binding.tvTotalAmount.setTextColor(Color.parseColor("#00FF6F"))
+                    val amount = header.totalAmount
+                    val formatted = if (amount % 1.0 == 0.0) {
+                        "$${amount.toInt()}"
+                    } else {
+                        "$${String.format("%.2f", amount)}"
+                    }
+                    binding.tvTotalAmount.text = formatted
+                }
+            } else {
+                binding.tvTotalAmount.text = "$${header.totalAmount}"
+            }
             binding.viewDivider.visibility = if (isFirst) View.GONE else View.VISIBLE
         }
-
-
     }
 
     inner class ItemViewHolder(val binding: ItemTransitionMainBinding) :
@@ -43,9 +63,21 @@ class ExpensesAdapter(
             val transaction = item.transaction
             binding.ivDisplay.setImageResource(transaction.img)
             binding.tvName.text = transaction.name
-            binding.tvAmount.text = "${transaction.amount} $"
+            val amount = transaction.amount.toDouble()
+            val formatted = if (amount % 1.0 == 0.0) {
+                "${amount.toInt()} $"
+            } else {
+                "$${String.format("%.2f", amount)}"
+            }
+            binding.tvAmount.text = formatted
             binding.tvTime.text = transaction.time
-
+            if (check == true) {
+                if (transaction.check) {
+                    binding.tvAmount.setTextColor(Color.parseColor("#02BB53"))
+                } else {
+                    binding.tvAmount.setTextColor(Color.parseColor("#FF2E2E"))
+                }
+            }
         }
     }
 
@@ -64,6 +96,7 @@ class ExpensesAdapter(
                 )
                 HeaderViewHolder(binding)
             }
+
             else -> {
                 val binding = ItemTransitionMainBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
@@ -78,9 +111,11 @@ class ExpensesAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
             is ExpenseListItem.DateHeader -> {
-                val isFirstHeader = position == items.indexOfFirst { it is ExpenseListItem.DateHeader }
+                val isFirstHeader =
+                    position == items.indexOfFirst { it is ExpenseListItem.DateHeader }
                 (holder as HeaderViewHolder).bind(item, isFirstHeader)
             }
+
             is ExpenseListItem.ExpenseItem -> (holder as ItemViewHolder).bind(item)
         }
     }
