@@ -1,6 +1,7 @@
 package com.example.moneymanager.ui.main
 
 import android.graphics.Color
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -66,15 +67,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val ivClose = view.findViewById<ImageView>(R.id.ic_close)
 
         tvAddExpense.setOnClickListener {
-            showActivity(AddTransactionActivity::class.java)
+            val bundle = Bundle().apply {
+                putInt("EXTRA_TYPE", 1)
+            }
+            showActivity(AddTransactionActivity::class.java,bundle)
             dialog.dismiss()
         }
         ivClose.setOnClickListener {
             dialog.dismiss()
         }
         tvAddIncome.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("EXTRA_TYPE", 2)
+            }
+            showActivity(AddTransactionActivity::class.java,bundle)
             dialog.dismiss()
-            Toast.makeText(this, "Thêm thu nhập", Toast.LENGTH_SHORT).show()
+        }
+        tvAddLoans.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("EXTRA_TYPE", 3)
+            }
+            showActivity(AddTransactionActivity::class.java,bundle)
+            dialog.dismiss()
         }
 
         dialog.show()
