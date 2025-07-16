@@ -16,4 +16,6 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
             dao.insertTransaction(transaction)
         }
     }
+
+
 }
