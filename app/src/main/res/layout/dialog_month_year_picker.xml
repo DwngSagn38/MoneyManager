@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_dialog"
+        android:padding="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <RadioGroup
+                android:id="@+id/rdoGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <RadioButton
+                    android:id="@+id/rbYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/year"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/opensans_700"/>
+
+                <RadioButton
+                    android:id="@+id/rbMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/month"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/opensans_700"/>
+
+            </RadioGroup>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/tvThisMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:elevation="4dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#15254F"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:id="@+id/tvThis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/this_month"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="24dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/opensans_600"/>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:background="@color/color_bg"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/btnPrevYear"
+                android:src="@drawable/ic_arrow_left"
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvYear"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:text="2025"
+                android:fontFamily="@font/opensans_700"
+                android:textColor="@color/white"
+                android:includeFontPadding="false"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/btnNextYear"
+                android:src="@drawable/ic_arrow_right"
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <GridLayout
+            android:id="@+id/gridMonths"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="4"
+            android:rowCount="3"
+            android:paddingTop="16dp">
+
+            <!-- 12 tháng -->
+            <TextView android:text="Jan" style="@style/MonthCell"/>
+            <TextView android:text="Feb" style="@style/MonthCell"/>
+            <TextView android:text="Mar" style="@style/MonthCell"/>
+            <TextView android:text="Apr" style="@style/MonthCell"/>
+            <TextView android:text="May" style="@style/MonthCell"/>
+            <TextView android:text="Jun" style="@style/MonthCell"/>
+            <TextView android:text="Jul" style="@style/MonthCell"/>
+            <TextView android:text="Aug" style="@style/MonthCell"/>
+            <TextView android:text="Sep" style="@style/MonthCell"/>
+            <TextView android:text="Oct" style="@style/MonthCell"/>
+            <TextView android:text="Nov" style="@style/MonthCell"/>
+            <TextView android:text="Dec" style="@style/MonthCell"/>
+        </GridLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:id="@+id/btnCancel"
+                android:text="@string/cancel"
+                style="@style/DialogButton"
+                android:backgroundTint="#56556F"/>
+
+            <TextView
+                android:id="@+id/btnSave"
+                android:text="@string/save"
+                style="@style/DialogButton"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
