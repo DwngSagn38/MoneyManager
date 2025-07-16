@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Lớp nền gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#7CA1FF"
+                android:endColor="#1C5DFF"
+                android:angle="0" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <!-- Lớp phủ màu đen mờ (80%) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#CC000000" /> <!-- 80% opacity = CC -->
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+</layer-list>

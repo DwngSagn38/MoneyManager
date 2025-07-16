@@ -32,7 +32,7 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
             binding.tvName.text = category.name
         }
 
-        val white = Color.WHITE
+        val white = Color.parseColor("#FFFFFF")
         val gray = Color.parseColor("#8B8888")
 
         binding.hourPicker.minValue = 0
@@ -145,10 +145,10 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
                 note = note,
                 time = time,
                 date = date,
-                amount = amount,
-                type = category.type,
                 idCategory = category.stt,
                 color = category.color
+                amount = amount.toFloat(),
+                type = category.type
             )
 
             viewModel.saveTransaction(transaction)
@@ -161,7 +161,6 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    @SuppressLint("SoonBlockedPrivateApi")
     fun setupNumberPickerColors(picker: NumberPicker, centerColor: Int, outerColor: Int) {
         try {
             val typeface = ResourcesCompat.getFont(this, R.font.opensans_600)
@@ -184,7 +183,12 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
                         } else {
                             String.format("%02d", picker.value)
                         }
-                        child.setTextColor(if (currentText == pickerValue) centerColor else outerColor)
+                        child.setTextColor(if (currentText == pickerValue) {
+                            centerColor
+                        } else {
+                            outerColor
+                        })
+
                         child.setTypeface(typeface)
                     }
                 }
