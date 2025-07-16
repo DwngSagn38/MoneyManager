@@ -11,6 +11,7 @@ import com.example.moneymanager.dialog.MonthYearPickerDialog
 import com.example.moneymanager.ui.analytics.AnalyticsPagerAdapter
 import com.example.moneymanager.ui.analytics.SharedAnalyticsViewModel
 import com.example.moneymanager.view.base.BaseFragment
+import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
 
 class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
@@ -25,14 +26,14 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
     private var selectedYear = 0
     private var sortByYear = false
     private lateinit var adapter: AnalyticsPagerAdapter
-    private lateinit var sharedViewModel: SharedAnalyticsViewModel
+    private lateinit var viewModel: SaveTransactionViewModel
 
     override fun initView() {
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedAnalyticsViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
         val calendar = Calendar.getInstance()
         selectedMonth = calendar.get(Calendar.MONTH)
         selectedYear = calendar.get(Calendar.YEAR)
-        sharedViewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
+        viewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
 
         adapter = AnalyticsPagerAdapter(this)
         binding.viewPager.adapter = adapter
@@ -68,8 +69,7 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
                 selectedMonth = month
                 sortByYear = sort
                 Log.d("MonthYear", "Selected: $month/$year sort by year: $sortByYear")
-                sharedViewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
-
+                viewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
             }
             dialog.show()
         }
@@ -97,6 +97,11 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
         }
     }
     override fun dataObservable() {
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
     }
 
 }

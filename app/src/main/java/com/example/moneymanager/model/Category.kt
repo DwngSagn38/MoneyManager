@@ -6,5 +6,6 @@ data class Category(
     val stt: Int,
     val name: String,
     val type: String,
-    val imgResId: Int
+    val imgResId: Int,
+    val color: Int,
 ): Serializable

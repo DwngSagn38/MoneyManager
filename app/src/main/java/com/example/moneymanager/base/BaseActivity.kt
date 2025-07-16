@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -321,45 +322,45 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         return categoryList
     }
     val ListExpenses = listOf(
-        Category(1, "Social", "Expense", R.drawable.ic_social),
-        Category(2, "Pets", "Expense", R.drawable.ic_pets),
-        Category(3, "Shopping", "Expense", R.drawable.ic_shopping),
-        Category(4, "Food & Dining", "Expense", R.drawable.ic_food_and_drink),
-        Category(5, "Transportation", "Expense", R.drawable.ic_transportation),
-        Category(6, "Groceries", "Expense", R.drawable.ic_groceries),
-        Category(7, "Education", "Expense", R.drawable.ic_education),
-        Category(8, "Bills & Utilities", "Expense", R.drawable.ic_bills_and_utilites),
-        Category(9, "Housing", "Expense", R.drawable.ic_housing),
-        Category(10, "Healthcare", "Expense", R.drawable.ic_healthcare),
-        Category(11, "Investments", "Expense", R.drawable.ic_investment_income),
-        Category(12, "Beauty", "Expense", R.drawable.ic_beauty),
-        Category(13, "Children", "Expense", R.drawable.ic_children),
-        Category(14, "Gifts", "Expense", R.drawable.ic_gifts),
-        Category(15, "Sports", "Expense", R.drawable.ic_sports),
-        Category(16, "Gym", "Expense", R.drawable.ic_gym),
-        Category(17, "Tobacco", "Expense", R.drawable.ic_tobacco),
-        Category(18, "Drinks", "Expense", R.drawable.ic_drinks),
-        Category(19, "Travel", "Expense", R.drawable.ic_travel),
-        Category(20, "Donations", "Expense", R.drawable.ic_donations),
-        Category(21, "Lottery", "Expense", R.drawable.ic_lottery),
-        Category(22, "Transit", "Expense", R.drawable.ic_transit),
-        Category(23, "Electronics", "Expense", R.drawable.ic_electronics),
-        Category(24, "Books", "Expense", R.drawable.ic_books),
-        Category(25, "Other", "Expense", R.drawable.ic_other)
+        Category(1, "Social", "Expense", R.drawable.ic_social,  Color.parseColor("#CB41C8")),
+        Category(2, "Pets", "Expense", R.drawable.ic_pets,  Color.parseColor("#EF5267")),
+        Category(3, "Shopping", "Expense", R.drawable.ic_shopping,  Color.parseColor("#45BEE3")),
+        Category(4, "Food & Dining", "Expense", R.drawable.ic_food_and_drink,  Color.parseColor("#FF9C23")),
+        Category(5, "Transportation", "Expense", R.drawable.ic_transportation,  Color.parseColor("#5271EF")),
+        Category(6, "Groceries", "Expense", R.drawable.ic_groceries,  Color.parseColor("#B38210")),
+        Category(7, "Education", "Expense", R.drawable.ic_education,  Color.parseColor("#30CDCF")),
+        Category(8, "Bills & Utilities", "Expense", R.drawable.ic_bills_and_utilites,  Color.parseColor("#45BEE3")),
+        Category(9, "Housing", "Expense", R.drawable.ic_housing,  Color.parseColor("#CB41C8")),
+        Category(10, "Healthcare", "Expense", R.drawable.ic_healthcare,  Color.parseColor("#E07B00")),
+        Category(11, "Investments", "Expense", R.drawable.ic_investment_income,  Color.parseColor("#00BB80")),
+        Category(12, "Beauty", "Expense", R.drawable.ic_beauty,  Color.parseColor("#F8344E")),
+        Category(13, "Children", "Expense", R.drawable.ic_children,  Color.parseColor("#3557E2")),
+        Category(14, "Gifts", "Expense", R.drawable.ic_gifts,  Color.parseColor("#FF0022")),
+        Category(15, "Sports", "Expense", R.drawable.ic_sports,  Color.parseColor("#5BB23B")),
+        Category(16, "Gym", "Expense", R.drawable.ic_gym,  Color.parseColor("#ED354D")),
+        Category(17, "Tobacco", "Expense", R.drawable.ic_tobacco,  Color.parseColor("#52EF93")),
+        Category(18, "Drinks", "Expense", R.drawable.ic_drinks,  Color.parseColor("#612712")),
+        Category(19, "Travel", "Expense", R.drawable.ic_travel,  Color.parseColor("#04FFB0")),
+        Category(20, "Donations", "Expense", R.drawable.ic_donations,  Color.parseColor("#F88800")),
+        Category(21, "Lottery", "Expense", R.drawable.ic_lottery,  Color.parseColor("#EF5252")),
+        Category(22, "Transit", "Expense", R.drawable.ic_transit,  Color.parseColor("#F8A745")),
+        Category(23, "Electronics", "Expense", R.drawable.ic_electronics,  Color.parseColor("#06E4E7")),
+        Category(24, "Books", "Expense", R.drawable.ic_books,  Color.parseColor("#DB5508")),
+        Category(25, "Other", "Expense", R.drawable.ic_other,  Color.parseColor("#BB52EF"))
     )
     val incomeCategories = listOf(
-        Category(26, "Salary", "Income", R.drawable.ic_salary),
-        Category(27, "Allowance", "Income", R.drawable.ic_allowance),
-        Category(28, "Awards", "Income", R.drawable.ic_awards),
-        Category(29, "Investments", "Income", R.drawable.ic_investment_income),
-        Category(30, "Business", "Income", R.drawable.ic_business),
-        Category(31, "Interest Income", "Income", R.drawable.ic_interest_income),
-        Category(32, "Extra Income", "Income", R.drawable.ic_extra_income),
-        Category(33, "Other", "Income", R.drawable.ic_other)
+        Category(26, "Salary", "Income", R.drawable.ic_salary,  Color.parseColor("#CB41C8")),
+        Category(27, "Allowance", "Income", R.drawable.ic_allowance,  Color.parseColor("#EF5267")),
+        Category(28, "Awards", "Income", R.drawable.ic_awards,  Color.parseColor("#45BEE3")),
+        Category(29, "Investments", "Income", R.drawable.ic_investment_income,  Color.parseColor("#2AC491")),
+        Category(30, "Business", "Income", R.drawable.ic_business,  Color.parseColor("#90AF16")),
+        Category(31, "Interest Income", "Income", R.drawable.ic_interest_income,  Color.parseColor("#45BEE3")),
+        Category(32, "Extra Income", "Income", R.drawable.ic_extra_income,  Color.parseColor("#30CDCF")),
+        Category(33, "Other", "Income", R.drawable.ic_other,  Color.parseColor("#BB52EF"))
     )
     val loansCategory = listOf(
-        Category(34,"Debt","Loans", R.drawable.ic_debt),
-        Category(35,"Loans","Loans", R.drawable.ic_loans3)
+        Category(34,"Debt","Loans", R.drawable.ic_debt,  Color.parseColor("#CB41C8")),
+        Category(35,"Loans","Loans", R.drawable.ic_loans3,  Color.parseColor("#EF5267"))
     )
 
 }

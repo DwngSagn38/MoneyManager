@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanager.R
 import com.example.moneymanager.databinding.FragmentExpenseAnalyticBinding
 import com.example.moneymanager.model.ExpenseCategory
+import com.example.moneymanager.model.TransactionEntity
 import com.example.moneymanager.ui.analytics.Expense1Adapter
 import com.example.moneymanager.ui.analytics.ExpenseAdapter
 import com.github.mikephil.charting.components.XAxis
@@ -16,8 +17,8 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 object AnalyticsChartHelper {
 
-    fun setupPieChart(context: Context, binding: FragmentExpenseAnalyticBinding, list: List<ExpenseCategory>) {
-        val pieEntries = list.map { PieEntry(it.amount, it.name) }
+    fun setupPieChart(context: Context, binding: FragmentExpenseAnalyticBinding, list: List<TransactionEntity>) {
+        val pieEntries = list.map { PieEntry(it.amount.toFloat(), it.name) }
         val pieDataSet = PieDataSet(pieEntries, "").apply {
             colors = list.map { it.color }
             valueTextColor = Color.TRANSPARENT
@@ -45,9 +46,9 @@ object AnalyticsChartHelper {
         }
     }
 
-    fun setupBarChart(context: Context, binding: FragmentExpenseAnalyticBinding, list: List<ExpenseCategory>) {
+    fun setupBarChart(context: Context, binding: FragmentExpenseAnalyticBinding, list: List<TransactionEntity>) {
         val barEntries = list.mapIndexed { index, cat ->
-            BarEntry(index.toFloat(), cat.amount)
+            BarEntry(index.toFloat(), cat.amount.toFloat())
         }
         val barDataSet = BarDataSet(barEntries, "").apply {
             colors = list.map { it.color }
@@ -79,9 +80,9 @@ object AnalyticsChartHelper {
     fun setupRecyclerView(
         context: Context,
         binding: FragmentExpenseAnalyticBinding,
-        list: List<ExpenseCategory>
+        list: List<TransactionEntity>
     ) {
-        var displayedList = if (list.size > 6) list.sortedByDescending { it.amount }.take(6) else list
+        var displayedList = if (list.size > 6) list.sortedByDescending { it.amount.toFloat() }.take(6) else list
         val adapter = ExpenseAdapter(displayedList)
 
         binding.rvExpenses.layoutManager = LinearLayoutManager(context)
@@ -94,7 +95,7 @@ object AnalyticsChartHelper {
                 adapter.updateData(displayedList)
                 binding.tvShowMore.text = context.getString(R.string.show_more)
             } else {
-                adapter.updateData(list.sortedByDescending { it.amount })
+                adapter.updateData(list.sortedByDescending { it.amount.toFloat() })
                 binding.tvShowMore.text = context.getString(R.string.show_less)
             }
         }
@@ -103,7 +104,7 @@ object AnalyticsChartHelper {
     fun setupRecyclerView1(
         context: Context,
         binding: FragmentExpenseAnalyticBinding,
-        list: List<ExpenseCategory>
+        list: List<TransactionEntity>
     ) {
         var displayedList = if (list.size > 6) list.take(6) else list
         val adapter = Expense1Adapter(displayedList)
@@ -124,17 +125,24 @@ object AnalyticsChartHelper {
         }
     }
 
-    fun groupByCategory(list: List<ExpenseCategory>): List<ExpenseCategory> {
+    fun groupByTransaction(list: List<TransactionEntity>): List<TransactionEntity> {
         return list
             .groupBy { it.name }
             .map { (name, group) ->
-                ExpenseCategory(
+                val first = group.first()
+                TransactionEntity(
+//                    id = 0, // Bạn có thể để mặc định hoặc tự set nếu cần
+                    img = first.img,
                     name = name,
-                    amount = group.sumOf { it.amount.toDouble() }.toFloat(),
-                    color = group.first().color,
-                    iconRes = group.first().iconRes,
-                    createdAt = group.minOf { it.createdAt }
+                    note = first.note, // Hoặc kết hợp các ghi chú nếu muốn
+                    time = first.time,
+                    date = group.minByOrNull { it.date }?.date ?: first.date, // ngày nhỏ nhất
+                    amount = group.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString(),
+                    type = first.type,
+                    idCategory = first.idCategory,
+                    color = first.color
                 )
             }
     }
+
 }

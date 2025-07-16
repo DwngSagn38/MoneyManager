@@ -14,4 +14,6 @@ data class TransactionEntity(
   val date: String,
   val amount: String,
   val type: String,
+  val idCategory: Int,
+  val color: Int,
 )

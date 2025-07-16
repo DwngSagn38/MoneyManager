@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.moneymanager.R
 import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.databinding.ActivityMainBinding
@@ -15,6 +16,7 @@ import com.example.moneymanager.ui.main.fragment_main.AnalyticsFragment
 import com.example.moneymanager.ui.main.fragment_main.BudgetFragment
 import com.example.moneymanager.ui.main.fragment_main.HomeFragment
 import com.example.moneymanager.ui.main.fragment_main.TransactionFragment
+import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -26,8 +28,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initView() {
         openFragment(HomeFragment())
     }
+    private lateinit var viewModel: SaveTransactionViewModel
 
     override fun viewListener() {
+        viewModel = ViewModelProvider(this).get(SaveTransactionViewModel::class.java)
+
         binding.clHome.setOnClickListener {
             openFragment(HomeFragment())
         }

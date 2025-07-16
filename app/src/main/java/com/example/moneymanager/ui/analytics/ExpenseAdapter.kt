@@ -14,13 +14,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
 import com.example.moneymanager.model.ExpenseCategory
+import com.example.moneymanager.model.TransactionEntity
 
-class ExpenseAdapter(private var list: List<ExpenseCategory>) :
+class ExpenseAdapter(private var list: List<TransactionEntity>) :
     RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
 
     private var totalAmount = list.sumOf { it.amount.toDouble() }
 
-    fun updateData(newList: List<ExpenseCategory>) {
+    fun updateData(newList: List<TransactionEntity>) {
         list = newList
         notifyDataSetChanged()
     }
@@ -43,10 +44,10 @@ class ExpenseAdapter(private var list: List<ExpenseCategory>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
         holder.tvName.text = item.name
-        holder.tvAmount.text = "$${item.amount.toInt()}"
-        holder.imgIcon.setImageResource(item.iconRes)
+        holder.tvAmount.text = "$${item.amount.toFloat()}"
+        holder.imgIcon.setImageResource(item.img)
 
-        holder.progressBar.progress = ((item.amount / totalAmount) * 100).toInt()
+        holder.progressBar.progress = ((item.amount.toFloat() / totalAmount) * 100).toInt()
 
         // Tạo progressDrawable động
         val backgroundDrawable = GradientDrawable().apply {
