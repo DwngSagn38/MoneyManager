@@ -60,5 +60,6 @@
     <string name="error_empty_note">Please enter a note!</string>
     <string name="error_empty_amount">Please enter an amount!</string>
     <string name="success_transaction_saved">Transaction saved successfully!</string>
+    <string name="total_expenses">Total Expenses</string>
 
 </resources>
