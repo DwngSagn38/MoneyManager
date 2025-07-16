@@ -27,6 +27,7 @@
     <color name="color_42834F">#42834F</color>
     <color name="color_B1C7FF">#B1C7FF</color>
     <color name="color_2C2C2C">#2C2C2C</color>
+    <color name="color_C3C3C3">#C3C3C3</color>
     <color name="gray_300">#D0D5DD</color>
     <color name="bg_dialog">#0D101B</color>
     <color name="bg_item_language">#1D2939</color>
@@ -35,6 +36,7 @@
     <color name="green">#12AD0F</color>
     <color name="main">#3368EE</color>
     <color name="primary">#232059</color>
+    <color name="color_bg">#1A1840</color>
 
     <color name="text_item">#4F4F4F</color>
 

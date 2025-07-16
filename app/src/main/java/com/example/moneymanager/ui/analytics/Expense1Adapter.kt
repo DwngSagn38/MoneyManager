@@ -8,18 +8,21 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
-import com.example.moneymanager.model.ExpenseCategory
+import com.example.moneymanager.model.TransactionEntity
 
-class Expense1Adapter(private val list: List<ExpenseCategory>) :
+class Expense1Adapter(private var list: List<TransactionEntity>) :
     RecyclerView.Adapter<Expense1Adapter.ViewHolder>() {
 
     // Tính tổng chi tiêu để dùng cho progress
-    private val totalAmount = list.sumOf { it.amount.toDouble() }
+    private var totalAmount = list.sumOf { it.amount.toDouble() }
+    fun updateData(newList: List<TransactionEntity>) {
+        list = newList
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val viewColor: View = itemView.findViewById(R.id.viewColor)
@@ -45,10 +48,8 @@ class Expense1Adapter(private val list: List<ExpenseCategory>) :
         }
         holder.viewColor.background = circleDrawable
 
-
-        val total = list.sumOf { it.amount.toDouble() }
-        holder.progressBar.progress = ((item.amount / total) * 100).toInt()
-        holder.tvLegendPercent.text = "${"%.0f".format((item.amount / 1260f) * 100)}%"
+        holder.progressBar.progress = ((item.amount.toFloat() / totalAmount) * 100).toInt()
+        holder.tvLegendPercent.text = "${"%.0f".format((item.amount.toFloat() / totalAmount) * 100)}%"
         // Tạo progressDrawable động
         val backgroundDrawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE

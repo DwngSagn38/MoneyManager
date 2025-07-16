@@ -1,5 +1,6 @@
 package com.example.moneymanager.ui.expense
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -139,14 +140,15 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
             )
 
             val transaction = TransactionEntity(
-                idCatagory = category.stt,
                 img = category.imgResId,
                 name = category.name,
                 note = note,
+                idCategory = category.stt,
                 time = time,
                 date = date,
                 amount = amount.toFloat(),
-                type = category.type
+                type = category.type,
+                color = category.color,
             )
 
             viewModel.saveTransaction(transaction)
@@ -159,6 +161,7 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
+    @SuppressLint("SoonBlockedPrivateApi")
     fun setupNumberPickerColors(picker: NumberPicker, centerColor: Int, outerColor: Int) {
         try {
             val typeface = ResourcesCompat.getFont(this, R.font.opensans_600)
