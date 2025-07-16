@@ -44,6 +44,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:fontFamily="@font/opensans_600"
+            android:textSize="16sp"
             android:textColor="#FF2E2E"
             android:id="@+id/tvAmount"
             android:layout_width="wrap_content"

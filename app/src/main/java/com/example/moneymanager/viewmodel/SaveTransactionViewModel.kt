@@ -41,8 +41,8 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
     private val _incomes = MutableStateFlow<List<TransactionEntity>>(emptyList())
     val incomes: StateFlow<List<TransactionEntity>> = _incomes
 
-    private val _totalIncomes = MutableStateFlow(0f)
-    val totalIncomes: StateFlow<Float> = _totalIncomes
+    private val _totalIncome = MutableStateFlow(0f)
+    val totalIncome: StateFlow<Float> = _totalIncome
 
     private val _loans = MutableStateFlow<List<TransactionEntity>>(emptyList())
     val loans: StateFlow<List<TransactionEntity>> = _loans
@@ -52,9 +52,6 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
 
     private val _totalBorrowed = MutableStateFlow(0f)
     val totalBorrowed: StateFlow<Float> = _totalBorrowed
-
-    private val _totalBalance = MutableStateFlow(0f)
-    val totalBalance: StateFlow<Float> = _totalBalance
 
     fun saveTransaction(transaction: TransactionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -117,12 +114,12 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
                 }
                 "Income" -> {
                     _incomes.value = list
-                    _totalIncomes.value = list.sumOf { it.amount.toDouble() }.toFloat()
+                    _totalIncome.value = list.sumOf { it.amount.toDouble() }.toFloat()
                 }
-                "Loan" -> {
+                "Loans" ->{
                     _loans.value = list
-                    _totalLoans.value = list.filter { it.id == 35 }.sumOf { it.amount.toDouble() }.toFloat()
-                    _totalBorrowed.value = list.filter { it.id == 34 }.sumOf { it.amount.toDouble() }.toFloat()
+                    _totalLoans.value = list.filter { it.check == true }.sumOf { it.amount.toDouble() }.toFloat()
+                    _totalBorrowed.value = list.filter { it.check == false }.sumOf { it.amount.toDouble() }.toFloat()
                 }
             }
         }
