@@ -70,6 +70,6 @@
     <string name="this_year">This year</string>
     <string name="total">Total</string>
     <string name="total_income">Total Income</string>
-    <string name="money_borrowed">Money Borrowed</string>
+    <string name="money_borrowed">Borrowed</string>
 
 </resources>

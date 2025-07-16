@@ -15,6 +15,8 @@ class AnalyticsDetailFragment : BaseFragment<FragmentAnalyticsDetailBinding>() {
     }
 
     override fun initView() {
+        val name = arguments?.getString("name")
+        binding.tvName.text = name
     }
 
     override fun viewListener() {

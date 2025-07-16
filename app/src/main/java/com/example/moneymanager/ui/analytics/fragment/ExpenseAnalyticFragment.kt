@@ -42,7 +42,7 @@ class ExpenseAnalyticFragment : BaseFragment<FragmentExpenseAnalyticBinding>() {
 
             AnalyticsChartHelper.setupPieChart(requireContext(), binding, grouped)
             AnalyticsChartHelper.setupBarChart(requireContext(), binding, grouped)
-            AnalyticsChartHelper.setupRecyclerView(requireContext(), binding, grouped)
+            AnalyticsChartHelper.setupRecyclerView(requireContext(), binding, grouped,parentFragmentManager)
             AnalyticsChartHelper.setupRecyclerView1(requireContext(), binding, grouped)
         }
 

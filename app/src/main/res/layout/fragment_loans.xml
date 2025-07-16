@@ -51,7 +51,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_loans"
+            android:id="@+id/tv_borrowed"
             android:gravity="center"
             android:layout_marginStart="14dp"
             android:textColor="#FF0000"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"/>
 
         <TextView
-            android:id="@+id/tv_borrowed"
+            android:id="@+id/tv_loans"
             android:layout_marginEnd="10dp"
             android:gravity="center"
             android:text="0.00$"
