@@ -7,21 +7,23 @@ import androidx.room.RoomDatabase
 import com.example.moneymanager.dao.TransactionDao
 import com.example.moneymanager.model.TransactionEntity
 
-@Database(entities = [TransactionEntity::class], version = 1, exportSchema = false)
+// AppDatabase.kt
+
+@Database(entities = [TransactionEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
+
     abstract fun transactionDao(): TransactionDao
 
     companion object {
-        @Volatile private var INSTANCE: AppDatabase? = null
+        @Volatile private var instance: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                Room.databaseBuilder(
+        fun getDatabase(context: Context): AppDatabase =
+            instance ?: synchronized(this) {
+                instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
                     "money_manager_db"
-                ).build().also { INSTANCE = it }
+                ).build().also { instance = it }
             }
-        }
     }
 }

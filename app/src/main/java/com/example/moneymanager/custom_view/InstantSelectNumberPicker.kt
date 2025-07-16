@@ -29,11 +29,11 @@ class InstantSelectNumberPicker @JvmOverloads constructor(
 
     private fun updateChildColors() {
         try {
-            val selectorWheelPaintField =
-                NumberPicker::class.java.getDeclaredField("mSelectorWheelPaint")
-            selectorWheelPaintField.isAccessible = true
-            val selectorPaint = selectorWheelPaintField.get(this) as Paint
-            selectorPaint.color = outerColor
+//            val selectorWheelPaintField =
+//                NumberPicker::class.java.getDeclaredField("mSelectorWheelPaint")
+//            selectorWheelPaintField.isAccessible = true
+//            val selectorPaint = selectorWheelPaintField.get(this) as Paint
+//            selectorPaint.color = outerColor
 
             for (i in 0 until childCount) {
                 val child = getChildAt(i)

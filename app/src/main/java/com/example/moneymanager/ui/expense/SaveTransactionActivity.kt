@@ -31,7 +31,7 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
             binding.tvName.text = category.name
         }
 
-        val white = Color.WHITE
+        val white = Color.parseColor("#FFFFFF")
         val gray = Color.parseColor("#8B8888")
 
         binding.hourPicker.minValue = 0
@@ -139,12 +139,13 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
             )
 
             val transaction = TransactionEntity(
+                idCatagory = category.stt,
                 img = category.imgResId,
                 name = category.name,
                 note = note,
                 time = time,
                 date = date,
-                amount = amount,
+                amount = amount.toFloat(),
                 type = category.type
             )
 
@@ -180,7 +181,12 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
                         } else {
                             String.format("%02d", picker.value)
                         }
-                        child.setTextColor(if (currentText == pickerValue) centerColor else outerColor)
+                        child.setTextColor(if (currentText == pickerValue) {
+                            centerColor
+                        } else {
+                            outerColor
+                        })
+
                         child.setTypeface(typeface)
                     }
                 }
