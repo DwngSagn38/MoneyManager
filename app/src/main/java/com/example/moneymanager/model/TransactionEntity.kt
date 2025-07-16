@@ -10,7 +10,6 @@ data class TransactionEntity(
   val img: Int,
   val name: String,
   val note: String,
-  val idCatagory: Int,
   val time: String,
   val date: String,
   val amount: Float,

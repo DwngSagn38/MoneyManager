@@ -137,7 +137,7 @@ object AnalyticsChartHelper {
                     note = first.note, // Hoặc kết hợp các ghi chú nếu muốn
                     time = first.time,
                     date = group.minByOrNull { it.date }?.date ?: first.date, // ngày nhỏ nhất
-                    amount = group.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString(),
+                    amount = group.sumOf { it.amount.toDouble() }.toFloat(),
                     type = first.type,
                     idCategory = first.idCategory,
                     color = first.color
