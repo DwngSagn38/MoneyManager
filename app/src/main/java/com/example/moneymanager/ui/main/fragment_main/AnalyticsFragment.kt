@@ -108,6 +108,7 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
         }
     }
     override fun dataObservable() {
+
     }
 
     override fun onResume() {

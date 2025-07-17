@@ -3,6 +3,7 @@ package com.example.moneymanager.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.Expe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class SaveTransactionViewModel(application: Application) : AndroidViewModel(application) {
@@ -28,9 +30,8 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
     private val _filteredTransactions = MutableLiveData<List<TransactionEntity>>()
     val filteredTransactions: LiveData<List<TransactionEntity>> get() = _filteredTransactions
 
-    init {
-        fetchAllTransactions()
-    }
+    private val _totalBalance = MutableStateFlow(0f)
+    val totalBalance: StateFlow<Float> = _totalBalance
 
     private val _expenses = MutableStateFlow<List<TransactionEntity>>(emptyList())
     val expenses: StateFlow<List<TransactionEntity>> = _expenses
@@ -52,6 +53,23 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
 
     private val _totalBorrowed = MutableStateFlow(0f)
     val totalBorrowed: StateFlow<Float> = _totalBorrowed
+
+    init {
+        fetchAllTransactions()
+
+        viewModelScope.launch {
+            combine(
+                _totalIncome,
+                _totalExpenses,
+                _totalLoans,
+                _totalBorrowed
+            ) { income, expenses, loans, borrowed ->
+                income - expenses + (loans - borrowed)
+            }.collect { balance ->
+                _totalBalance.value = balance
+            }
+        }
+    }
 
     fun saveTransaction(transaction: TransactionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -104,6 +122,7 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
     }
 
 
+
     fun loadTransactionsByType(type: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val list = dao.getTransactionsByType(type)
@@ -124,5 +143,41 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
             }
         }
     }
+
+    private val _twoMonthsTransactions = MutableLiveData<List<TransactionEntity>>()
+    val twoMonthsTransactions: LiveData<List<TransactionEntity>> get() = _twoMonthsTransactions
+
+    fun filterTransactionsForTwoMonths(month: Int, year: Int, name: String, sortByYear: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val all = dao.getAllTransactions()
+
+            val filtered = all.filter { transaction ->
+                val parts = transaction.date.split("/") // dd/MM/yyyy
+                if (parts.size != 3) return@filter false
+
+                val itemMonth = parts[1].toIntOrNull() ?: return@filter false
+                val itemYear = parts[2].toIntOrNull() ?: return@filter false
+
+                if (sortByYear) {
+                    // Lọc theo name, và trong năm hiện tại hoặc năm trước
+                    (itemYear == year || itemYear == year - 1) && transaction.name == name
+                } else {
+                    // Lọc theo name, trong tháng hiện tại hoặc tháng trước
+                    val thisMonth = month + 1
+                    val lastMonth = if (thisMonth == 1) 12 else thisMonth - 1
+                    val lastMonthYear = if (thisMonth == 1) year - 1 else year
+
+                    (itemYear == year && itemMonth == thisMonth ||
+                            itemYear == lastMonthYear && itemMonth == lastMonth)
+                            && transaction.name == name
+                }
+            }
+
+            Log.d("SaveTransactionVM", "Filtered transactions: $filtered")
+            _twoMonthsTransactions.postValue(filtered)
+        }
+    }
+
+
 
 }

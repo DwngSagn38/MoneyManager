@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.example.moneymanager.model.TransactionEntity
 import com.example.moneymanager.ui.analytics.AnalyticsDetailFragment
 import com.example.moneymanager.ui.analytics.adapter.Expense1Adapter
 import com.example.moneymanager.ui.analytics.adapter.ExpenseAdapter
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
@@ -49,7 +51,7 @@ object AnalyticsChartHelper {
         }
     }
 
-    fun setupBarChart(context: Context, binding: FragmentExpenseAnalyticBinding, list: List<TransactionEntity>) {
+    fun setupBarChart(context: Context, barChart: BarChart, list: List<TransactionEntity>) {
         val barEntries = list.mapIndexed { index, cat ->
             BarEntry(index.toFloat(), cat.amount.toFloat())
         }
@@ -62,7 +64,7 @@ object AnalyticsChartHelper {
             setValueTextColor(Color.WHITE)
         }
 
-        binding.barChart.apply {
+        barChart.apply {
             data = barData
             description.isEnabled = false
             axisRight.isEnabled = false
@@ -84,7 +86,10 @@ object AnalyticsChartHelper {
         context: Context,
         binding: FragmentExpenseAnalyticBinding,
         list: List<TransactionEntity>,
-        fragmentManager: FragmentManager
+        fragmentManager: FragmentManager,
+        month : Int,
+        year : Int,
+        sortByYear: Boolean
     ) {
         var displayedList = if (list.size > 6) list.sortedByDescending { it.amount.toFloat() }.take(6) else list
         val adapter = ExpenseAdapter(displayedList) { transaction ->
@@ -94,11 +99,14 @@ object AnalyticsChartHelper {
             // Gửi dữ liệu qua bằng Bundle (giả sử bạn muốn gửi name, amount,...)
             val bundle = Bundle().apply {
                 putString("name", transaction.name)
+                putInt("month", month)
+                putInt("year", year)
+                putBoolean("sortByYear", sortByYear)
             }
             detailFragment.arguments = bundle
 
             fragmentManager.beginTransaction()
-                .replace(R.id.analyticDetail, detailFragment) // Sửa ID theo layout của bạn
+                .replace(R.id.fragment_container_view, detailFragment) // Sửa ID theo layout của bạn
                 .addToBackStack(null)
                 .commit()
         }
@@ -141,6 +149,80 @@ object AnalyticsChartHelper {
             }
         }
     }
+
+    fun setupBarChartForTwoMonths(
+        context: Context,
+        barChart: BarChart,
+        transactions: List<TransactionEntity>,
+        currentMonth: Int,
+        currentYear: Int,
+        sortByYear: Boolean
+    ) {
+        val thisMonth = currentMonth + 1
+        val lastMonth = if (thisMonth == 1) 12 else thisMonth - 1
+        val lastMonthYear = if (thisMonth == 1) currentYear - 1 else currentYear
+
+        var thisMonthTotal = 0f
+        var lastMonthTotal = 0f
+
+        for (transaction in transactions) {
+            val parts = transaction.date.split("/")
+            if (parts.size != 3) continue
+
+            val itemDay = parts[0].toIntOrNull() ?: continue
+            val itemMonth = parts[1].toIntOrNull() ?: continue
+            val itemYear = parts[2].toIntOrNull() ?: continue
+
+            val amount = transaction.amount
+
+            if (!sortByYear){
+                if (itemYear == currentYear && itemMonth == thisMonth) {
+                    thisMonthTotal += amount
+                } else if (itemYear == lastMonthYear && itemMonth == lastMonth) {
+                    lastMonthTotal += amount
+                }
+            }else{
+                if (itemYear == currentYear) {
+                    thisMonthTotal += amount
+                } else if (itemYear == currentYear - 1) {
+                    lastMonthTotal += amount
+                }
+            }
+        }
+
+        val entries = listOf(
+            BarEntry(0f, lastMonthTotal),
+            BarEntry(1f, thisMonthTotal)
+        )
+
+        val barDataSet = BarDataSet(entries, "").apply {
+            color = ContextCompat.getColor(context, R.color.color_6480F1) // hoặc chọn 2 màu khác nhau nếu muốn
+            valueTextColor = Color.WHITE
+            valueTextSize = 12f
+        }
+
+        val barData = BarData(barDataSet).apply {
+            barWidth = 0.4f
+        }
+
+        barChart.apply {
+            data = barData
+            description.isEnabled = false
+            axisRight.isEnabled = false
+            xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(if (sortByYear) listOf("Last Year", "This Year") else listOf("Last Month", "This Month"))
+                position = XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                setDrawGridLines(false)
+                textColor = Color.WHITE
+            }
+            axisLeft.textColor = Color.WHITE
+            legend.isEnabled = false
+            animateY(800)
+            invalidate()
+        }
+    }
+
 
     fun groupByTransaction(list: List<TransactionEntity>): List<TransactionEntity> {
         return list

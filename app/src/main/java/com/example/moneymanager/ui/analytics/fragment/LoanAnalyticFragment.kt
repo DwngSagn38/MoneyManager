@@ -18,12 +18,17 @@ class LoanAnalyticFragment: BaseFragment<FragmentExpenseAnalyticBinding>() {
     }
 
     private lateinit var viewModel: SaveTransactionViewModel
+    private var monthChoose = 0
+    private var yearChoose = 0
+    private var sortByYearChoose = false
 
     override fun initView() {
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
         viewModel.selectedDate.observe(viewLifecycleOwner) { (month, year, sortByYear) ->
             Log.d("ExpenseAnalyticFragment", "date selected: $month, $year, $sortByYear")
-
+            monthChoose = month
+            yearChoose = year
+            sortByYearChoose = sortByYear
             viewModel.filterTransactions(month, year, sortByYear)
             if (sortByYear) {
                 binding.tvTimeCheck.text = "$year"
@@ -39,8 +44,8 @@ class LoanAnalyticFragment: BaseFragment<FragmentExpenseAnalyticBinding>() {
             Log.d("ExpenseAnalyticFragment", "Filtered Transactions: $filtered")
 
             AnalyticsChartHelper.setupPieChart(requireContext(), binding, grouped)
-            AnalyticsChartHelper.setupBarChart(requireContext(), binding, grouped)
-            AnalyticsChartHelper.setupRecyclerView(requireContext(), binding, grouped,parentFragmentManager)
+            AnalyticsChartHelper.setupBarChart(requireContext(), binding.barChart, grouped)
+            AnalyticsChartHelper.setupRecyclerView(requireContext(), binding, grouped,parentFragmentManager, monthChoose, yearChoose, sortByYearChoose)
             AnalyticsChartHelper.setupRecyclerView1(requireContext(), binding, grouped)
         }
 
