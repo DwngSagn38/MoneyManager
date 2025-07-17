@@ -44,7 +44,6 @@ class ExpenseAnalyticFragment : BaseFragment<FragmentExpenseAnalyticBinding>() {
         viewModel.filteredTransactions.observe(viewLifecycleOwner) { filtered ->
             val grouped = AnalyticsChartHelper.groupByTransaction(filtered.filter { it.type == "Expense" })
             Log.d("ExpenseAnalyticFragment", "Filtered Transactions: $filtered")
-
             AnalyticsChartHelper.setupPieChart(requireContext(), binding, grouped)
             AnalyticsChartHelper.setupBarChart(requireContext(), binding.barChart, grouped)
             AnalyticsChartHelper.setupRecyclerView(requireContext(), binding, grouped, parentFragmentManager, monthChoose, yearChoose, sortByYearChoose )

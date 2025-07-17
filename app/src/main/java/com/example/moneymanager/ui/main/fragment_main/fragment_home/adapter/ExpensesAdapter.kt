@@ -63,7 +63,7 @@ class ExpensesAdapter(
             binding.tvName.text = transaction.name
             val amount = transaction.amount.toDouble()
             val formatted = if (amount % 1.0 == 0.0) {
-                "${amount.toInt()} $"
+                "$${amount.toInt()}"
             } else {
                 "$${String.format("%.2f", amount)}"
             }

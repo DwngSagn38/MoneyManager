@@ -1,5 +1,6 @@
 package com.example.moneymanager.ui.main.fragment_main.fragment_home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +17,9 @@ import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 class LoansFragment:BaseFragment<FragmentLoansBinding>() {
     private lateinit var viewModel: SaveTransactionViewModel
     private lateinit var adapter: ExpensesAdapter
+    private var totalLoans: Float = 0f
+    private var totalBorrower: Float = 0f
+
     override fun setViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -28,33 +32,29 @@ class LoansFragment:BaseFragment<FragmentLoansBinding>() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        )[SaveTransactionViewModel::class.java]
-
+        viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
+        viewModel.selectedDate.observe(viewLifecycleOwner) { (month, year, sortByYear) ->
+            Log.d(
+                "ExpenseAnalyticFragment",
+                "selectedDate changed: $month/$year, sortByYear=$sortByYear"
+            )
+            viewModel.filterTransactions(month, year, sortByYear)
+        }
         viewModel.loadTransactionsByType("Loans")
     }
 
     override fun dataObservable() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.loans.collect { transactions ->
-                val groupedList = groupTransactionsByDate(transactions)
-                adapter.submitList(groupedList)
-            }
-        }
-        lifecycleScope.launchWhenStarted {
-            viewModel.totalLoans.collect { total ->
-                binding.tvLoans.text = "$%.2f".format(total)
-            }
+        viewModel.filteredTransactions.observe(viewLifecycleOwner) { filtered ->
+            val grouped = filtered.filter { it.type == "Loans" }
+            totalLoans = grouped.filter { it.check == true }.sumOf { it.amount.toDouble() }.toFloat()
+            totalBorrower = grouped.filter { it.check == false }.sumOf { it.amount.toDouble() }.toFloat()
+            binding.tvLoans.text = "$%.2f".format(totalLoans)
+            binding.tvBorrowed.text = "$%.2f".format(totalBorrower)
 
+            val groupedList = groupTransactionsByDate(grouped)
+            adapter.submitList(groupedList)
+            Log.d("ExpenseAnalyticFragment", "Filtered Transactions: $grouped")
         }
-        lifecycleScope.launchWhenStarted {
-            viewModel.totalBorrowed.collect { total ->
-                binding.tvBorrowed.text = "$%.2f".format(total)
-            }
-        }
-
     }
 
     private fun groupTransactionsByDate(transactions: List<TransactionEntity>): List<ExpenseListItem> {
@@ -75,9 +75,12 @@ class LoansFragment:BaseFragment<FragmentLoansBinding>() {
 
 
     override fun onResume() {
-        viewModel.loadTransactionsByType("Loans")
         super.onResume()
+        viewModel.selectedDate.observe(viewLifecycleOwner) { (month, year, sortByYear) ->
+            viewModel.filterTransactions(month, year, sortByYear)
+        }
     }
+
     override fun viewListener() {}
 
 }

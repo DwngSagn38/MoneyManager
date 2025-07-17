@@ -68,4 +68,5 @@ class IncomeAnalyticFragment: BaseFragment<FragmentExpenseAnalyticBinding>() {
         }
     }
 
+
 }

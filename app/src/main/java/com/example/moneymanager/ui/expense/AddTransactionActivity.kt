@@ -30,7 +30,6 @@ class AddTransactionActivity : BaseActivity<ActivityAddTransactionBinding>() {
             val intent = Intent(this, SaveTransactionActivity::class.java)
             intent.putExtra("CATEGORY_DATA", category)
             startActivity(intent)
-            finish()
         }
 
         binding.recyclerViewCategory.layoutManager = GridLayoutManager(this, 4)

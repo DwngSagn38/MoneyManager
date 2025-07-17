@@ -125,7 +125,7 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
 
     fun loadTransactionsByType(type: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val list = dao.getTransactionsByType(type)
+            val list :List<TransactionEntity> = dao.getTransactionsByType(type)
             when (type) {
                 "Expense" -> {
                     _expenses.value = list

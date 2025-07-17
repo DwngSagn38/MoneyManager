@@ -10,6 +10,7 @@ import com.example.moneymanager.databinding.FragmentExpensesBinding
 import com.example.moneymanager.model.TransactionEntity
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpenseListItem
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpensesAdapter
+import com.example.moneymanager.utils.helper.AnalyticsChartHelper
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.text.SimpleDateFormat
@@ -19,6 +20,7 @@ import java.util.Locale
 class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
     private lateinit var viewModel: SaveTransactionViewModel
     private lateinit var adapter: ExpensesAdapter
+    private var totalExpenses: Float = 0f
 
     override fun setViewBinding(
         inflater: LayoutInflater,
@@ -28,34 +30,31 @@ class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
     }
 
     override fun initView() {
-        adapter = ExpensesAdapter(emptyList(),false)
+        adapter = ExpensesAdapter(emptyList(), false)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory(requireActivity().application)
-        )[SaveTransactionViewModel::class.java]
-
-        viewModel.loadTransactionsByType("Expense")
+        viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
+        viewModel.selectedDate.observe(viewLifecycleOwner) { (month, year, sortByYear) ->
+            Log.d(
+                "ExpenseAnalyticFragment",
+                "selectedDate changed: $month/$year, sortByYear=$sortByYear"
+            )
+            viewModel.filterTransactions(month, year, sortByYear)
+        }
     }
 
     override fun dataObservable() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.expenses.collect { transactions ->
-                val groupedList = groupTransactionsByDate(transactions)
-                adapter.submitList(groupedList)
-                Log.d("aa132",groupedList.toString())
-            }
-        }
-
-        // 2. Observe tổng chi tiêu để hiển thị lên TextView
-        lifecycleScope.launchWhenStarted {
-            viewModel.totalExpenses.collect { total ->
-                binding.tvExpensesTotal.text = "$%.2f".format(total)
-            }
+        viewModel.filteredTransactions.observe(viewLifecycleOwner) { filtered ->
+            val grouped = filtered.filter { it.type == "Expense" }
+            totalExpenses = grouped.sumOf { it.amount.toDouble() }.toFloat()
+            binding.tvExpensesTotal.text = "$%.2f".format(totalExpenses)
+            val groupedList = groupTransactionsByDate(grouped)
+            adapter.submitList(groupedList)
+            Log.d("ExpenseAnalyticFragment", "Filtered Transactions: $grouped")
         }
     }
+
 
     private fun groupTransactionsByDate(transactions: List<TransactionEntity>): List<ExpenseListItem> {
         val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -80,9 +79,13 @@ class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
 
 
     override fun onResume() {
-        viewModel.loadTransactionsByType("Expense")
         super.onResume()
+        viewModel.selectedDate.observe(viewLifecycleOwner) { (month, year, sortByYear) ->
+            viewModel.filterTransactions(month, year, sortByYear)
+        }
     }
+
+
     override fun viewListener() {}
 
 
