@@ -71,5 +71,6 @@
     <string name="total">Total</string>
     <string name="total_income">Total Income</string>
     <string name="money_borrowed">Borrowed</string>
+    <string name="base_currency">Base Currency</string>
 
 </resources>
