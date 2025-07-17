@@ -1,5 +1,6 @@
 package com.example.moneymanager.ui.main.fragment_main.fragment_home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,9 @@ import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.Expe
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpensesAdapter
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
     private lateinit var viewModel: SaveTransactionViewModel
@@ -41,6 +45,7 @@ class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
             viewModel.expenses.collect { transactions ->
                 val groupedList = groupTransactionsByDate(transactions)
                 adapter.submitList(groupedList)
+                Log.d("aa132",groupedList.toString())
             }
         }
 
@@ -53,13 +58,20 @@ class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
     }
 
     private fun groupTransactionsByDate(transactions: List<TransactionEntity>): List<ExpenseListItem> {
-        val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
-        val groupedMap = transactions.sortedByDescending { it.time }
-            .groupBy { sdf.format(java.util.Date(it.date)) }
+        val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        // Parse chuỗi date đúng cách
+        val groupedMap = transactions.sortedByDescending {
+            inputFormat.parse(it.date) // sắp xếp đúng ngày
+        }.groupBy {
+            inputFormat.format(inputFormat.parse(it.date)!!) // group đúng ngày
+        }
 
         val result = mutableListOf<ExpenseListItem>()
         for ((date, list) in groupedMap) {
-            val total = list.sumOf { it.amount.toDouble() }
+            val total = list.sumOf {
+                if (it.check) it.amount.toDouble() else -it.amount.toDouble()
+            }
             result.add(ExpenseListItem.DateHeader(date, total))
             result.addAll(list.map { ExpenseListItem.ExpenseItem(it) })
         }

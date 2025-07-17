@@ -25,11 +25,13 @@ class ExpensesAdapter(
     inner class HeaderViewHolder(val binding: ItemDateHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(header: ExpenseListItem.DateHeader, isFirst: Boolean) {
-            val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("EEE, MMM dd", Locale.getDefault())
+            val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) // Định dạng đầu vào
+            val outputFormat = SimpleDateFormat("EEE, MMM dd", Locale.getDefault()) // Định dạng đầu ra
+
             val date = inputFormat.parse(header.date)
             val formattedDate = outputFormat.format(date!!)
             binding.tvDate.text = formattedDate
+
             if (check == true) {
                 if (header.totalAmount < 0) {
                     binding.tvTotalAmount.setTextColor(Color.parseColor("#FF2E2E"))
@@ -51,7 +53,13 @@ class ExpensesAdapter(
                     binding.tvTotalAmount.text = formatted
                 }
             } else {
-                binding.tvTotalAmount.text = "$${header.totalAmount}"
+                val amount = abs(header.totalAmount)
+                val formatted = if (amount % 1.0 == 0.0) {
+                    "-$${amount.toInt()}"
+                } else {
+                    "-$${String.format("%.2f", amount)}"
+                }
+                binding.tvTotalAmount.text = formatted
             }
             binding.viewDivider.visibility = if (isFirst) View.GONE else View.VISIBLE
         }

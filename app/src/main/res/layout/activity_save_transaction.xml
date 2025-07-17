@@ -47,11 +47,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="43dp" />
-    <ScrollView
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food &amp; drink"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv1"
+        android:textSize="20sp"
+        android:fontFamily="@font/opensans_400"
+        android:textColor="#FFA334"
+        android:layout_marginTop="75dp"/>
+
+    <ScrollView
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="60dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/tv_add">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,29 +71,16 @@
             android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Food &amp; drink"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/iv1"
-            android:textSize="20sp"
-            android:fontFamily="@font/opensans_400"
-            android:textColor="#FFA334"
-            android:layout_marginTop="75dp"/>
 
         <TextView
             android:id="@+id/tv1"
             android:text="Enter amount"
             android:textColor="#A7A7A7"
             android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:fontFamily="@font/opensans_400"
-            android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -222,9 +221,10 @@
 
             <NumberPicker
                 android:id="@+id/yearPicker"
-                android:layout_width="40dp"
+                android:layout_width="60dp"
                 android:layout_height="130dp"
-                android:layout_marginStart="20dp" />
+                android:paddingHorizontal="20dp"
+                 />
         </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
