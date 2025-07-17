@@ -72,5 +72,6 @@
     <string name="total_income">Total Income</string>
     <string name="money_borrowed">Borrowed</string>
     <string name="base_currency">Base Currency</string>
+    <string name="add_your_first_expense_to_get_started">Add your first expense to get started!</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.moneymanager.ui.main.fragment_main
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,15 +9,16 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.moneymanager.R
 import com.example.moneymanager.databinding.FragmentHomeBinding
 import com.example.moneymanager.dialog.MonthYearPickerDialog
+import com.example.moneymanager.ui.expense.AddTransactionActivity
 import com.example.moneymanager.ui.main.adapter.HomePagerAdapter
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.ExpensesFragment
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.IncomeFragment
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.LoansFragment
+import com.example.moneymanager.ui.setting.SettingActivity
 import com.example.moneymanager.utils.extensions.collectInLifecycle
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
-import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var selectedMonth = 0
@@ -47,6 +49,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun viewListener() {
+        binding.ivSetting.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("EXTRA_TYPE", 4)
+            }
+            showActivity(SettingActivity::class.java,bundle)
+        }
         binding.tvExpenses.setOnClickListener {
             binding.viewPager.currentItem = 0
         }

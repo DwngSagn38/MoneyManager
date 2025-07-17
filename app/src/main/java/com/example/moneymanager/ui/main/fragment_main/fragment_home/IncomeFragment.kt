@@ -12,6 +12,8 @@ import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.Expe
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpensesAdapter
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import com.example.moneymanager.widget.gone
+import com.example.moneymanager.widget.visible
 
 class IncomeFragment:BaseFragment<FragmentIncomeBinding>() {
     private lateinit var viewModel: SaveTransactionViewModel
@@ -46,6 +48,13 @@ class IncomeFragment:BaseFragment<FragmentIncomeBinding>() {
             totalIncome = grouped.sumOf { it.amount.toDouble() }.toFloat()
             binding.tvIncomeTotal.text = "$%.2f".format(totalIncome)
             val groupedList = groupTransactionsByDate(grouped)
+            if (groupedList.size != 0) {
+                binding.recyclerView.visible()
+                binding.clNull.gone()
+            } else {
+                binding.recyclerView.gone ()
+                binding.clNull.visible()
+            }
             adapter.submitList(groupedList)
             Log.d("ExpenseAnalyticFragment", "Filtered Transactions: $grouped")
         }

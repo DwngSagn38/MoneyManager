@@ -1,6 +1,7 @@
 package com.example.moneymanager.view.base
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,15 @@ abstract class BaseFragment<T : ViewBinding> : Fragment() {
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
             it.clearFocus()
         }
+    }
+    fun showActivity(activity: Class<*>) {
+        val intent = Intent(requireActivity(), activity)
+        startActivity(intent)
+    }
+    fun showActivity(activity: Class<*>, bundle: Bundle?){
+        val intent = Intent(requireActivity(), activity)
+        intent.putExtras(bundle ?: Bundle())
+        startActivity(intent)
     }
 
 }

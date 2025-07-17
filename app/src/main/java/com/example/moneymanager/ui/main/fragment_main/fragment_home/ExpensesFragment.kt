@@ -13,6 +13,8 @@ import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.Expe
 import com.example.moneymanager.utils.helper.AnalyticsChartHelper
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import com.example.moneymanager.widget.gone
+import com.example.moneymanager.widget.visible
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,6 +52,13 @@ class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
             totalExpenses = grouped.sumOf { it.amount.toDouble() }.toFloat()
             binding.tvExpensesTotal.text = "$%.2f".format(totalExpenses)
             val groupedList = groupTransactionsByDate(grouped)
+            if (groupedList.size != 0) {
+                binding.recyclerView.visible()
+                binding.clNull.gone()
+            } else {
+                binding.recyclerView.gone ()
+                binding.clNull.visible()
+            }
             adapter.submitList(groupedList)
             Log.d("ExpenseAnalyticFragment", "Filtered Transactions: $grouped")
         }

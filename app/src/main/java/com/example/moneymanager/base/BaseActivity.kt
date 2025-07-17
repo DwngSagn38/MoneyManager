@@ -314,13 +314,14 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         var checkPin:Int? = null
     }
     fun getCatagoryList(int: Int): List<Category> {
-        val categoryList = when(int) {
-            1-> ListExpenses
-            2-> incomeCategories
-            else -> loansCategory
+        return when (int) {
+            1 -> ListExpenses
+            2 -> incomeCategories
+            3 -> loansCategory
+            else -> ListExpenses + incomeCategories + loansCategory
         }
-        return categoryList
     }
+
     val ListExpenses = listOf(
         Category(1, "Social", "Expense", R.drawable.ic_social,  Color.parseColor("#CB41C8")),
         Category(2, "Pets", "Expense", R.drawable.ic_pets,  Color.parseColor("#EF5267")),
