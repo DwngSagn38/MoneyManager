@@ -45,7 +45,7 @@ class AnalyticsDetailFragment : BaseFragment<FragmentAnalyticsDetailBinding>() {
             AnalyticsChartHelper.setupBarChartForTwoMonths(
                 requireContext(),
                 binding.barChart,
-                transactions.sortedByDescending { it.date },
+                transactions,
                 month,
                 year,
                 sortByYear

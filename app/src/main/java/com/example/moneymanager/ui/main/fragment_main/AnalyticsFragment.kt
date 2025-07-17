@@ -9,6 +9,7 @@ import com.example.moneymanager.R
 import com.example.moneymanager.databinding.FragmentAnalyticsBinding
 import com.example.moneymanager.dialog.MonthYearPickerDialog
 import com.example.moneymanager.ui.analytics.adapter.AnalyticsPagerAdapter
+import com.example.moneymanager.utils.extensions.collectInLifecycle
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
@@ -38,6 +39,8 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
         adapter = AnalyticsPagerAdapter(this)
         binding.viewPager.adapter = adapter
         selectTab(0)
+
+        loadAll()
     }
 
     override fun viewListener() {
@@ -74,11 +77,11 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
             dialog.show()
         }
 
-        binding.imgVisible.setOnClickListener{
+        binding.imgVisible.setOnClickListener {
             isVisible = !isVisible
             if (isVisible) {
-                binding.tvBalance.text = "$56,534.8"
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_invisible)
+                binding.tvBalance.text = "$ %.2f".format(viewModel.totalBalance.value)
             } else {
                 binding.tvBalance.text = getString(R.string.invisible_balance)
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_visible)
@@ -108,12 +111,25 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
         }
     }
     override fun dataObservable() {
-
+        viewModel.totalBalance.collectInLifecycle(viewLifecycleOwner) { balance ->
+            if (isVisible) {
+                binding.tvBalance.text = "$ %.2f".format(balance)
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
+        loadAll()
     }
+
+    private fun loadAll(){
+        viewModel.loadTransactionsByType("Income")
+        viewModel.loadTransactionsByType("Expense")
+        viewModel.loadTransactionsByType("Loans")
+    }
+
+
 
 }
