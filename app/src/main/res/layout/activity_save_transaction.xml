@@ -210,7 +210,7 @@
 
             <NumberPicker
                 android:id="@+id/dayPicker"
-                android:layout_width="19dp"
+                android:layout_width="25dp"
                 android:layout_height="130dp" />
 
             <NumberPicker
@@ -221,9 +221,8 @@
 
             <NumberPicker
                 android:id="@+id/yearPicker"
-                android:layout_width="60dp"
+                android:layout_width="80dp"
                 android:layout_height="130dp"
-                android:paddingHorizontal="20dp"
                  />
         </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
