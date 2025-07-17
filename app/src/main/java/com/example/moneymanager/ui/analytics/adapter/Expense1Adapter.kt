@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui.analytics
+package com.example.moneymanager.ui.analytics.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.ClipDrawable

@@ -30,7 +30,6 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
 
     init {
         fetchAllTransactions()
-
     }
 
     private val _expenses = MutableStateFlow<List<TransactionEntity>>(emptyList())

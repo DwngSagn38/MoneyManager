@@ -1,4 +1,4 @@
-package com.example.moneymanager.ui.analytics
+package com.example.moneymanager.ui.analytics.adapter
 
 import android.graphics.Color
 import android.graphics.drawable.ClipDrawable
@@ -13,10 +13,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
-import com.example.moneymanager.model.ExpenseCategory
 import com.example.moneymanager.model.TransactionEntity
 
-class ExpenseAdapter(private var list: List<TransactionEntity>) :
+class ExpenseAdapter(
+    private var list: List<TransactionEntity>,
+    private val onItemClicked: (TransactionEntity) -> Unit
+    ) :
     RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
 
     private var totalAmount = list.sumOf { it.amount.toDouble() }
@@ -43,6 +45,7 @@ class ExpenseAdapter(private var list: List<TransactionEntity>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
+        holder.itemView.setOnClickListener { onItemClicked(item) }
         holder.tvName.text = item.name
         holder.tvAmount.text = "$${item.amount.toFloat()}"
         holder.imgIcon.setImageResource(item.img)

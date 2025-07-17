@@ -1,16 +1,19 @@
 package com.example.moneymanager.utils.helper
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanager.R
 import com.example.moneymanager.databinding.FragmentExpenseAnalyticBinding
-import com.example.moneymanager.model.ExpenseCategory
 import com.example.moneymanager.model.TransactionEntity
-import com.example.moneymanager.ui.analytics.Expense1Adapter
-import com.example.moneymanager.ui.analytics.ExpenseAdapter
+import com.example.moneymanager.ui.analytics.AnalyticsDetailFragment
+import com.example.moneymanager.ui.analytics.adapter.Expense1Adapter
+import com.example.moneymanager.ui.analytics.adapter.ExpenseAdapter
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
@@ -80,11 +83,25 @@ object AnalyticsChartHelper {
     fun setupRecyclerView(
         context: Context,
         binding: FragmentExpenseAnalyticBinding,
-        list: List<TransactionEntity>
+        list: List<TransactionEntity>,
+        fragmentManager: FragmentManager
     ) {
         var displayedList = if (list.size > 6) list.sortedByDescending { it.amount.toFloat() }.take(6) else list
-        val adapter = ExpenseAdapter(displayedList)
+        val adapter = ExpenseAdapter(displayedList) { transaction ->
+            // Khi item được click -> mở Fragment chi tiết
+            val detailFragment = AnalyticsDetailFragment()
 
+            // Gửi dữ liệu qua bằng Bundle (giả sử bạn muốn gửi name, amount,...)
+            val bundle = Bundle().apply {
+                putString("name", transaction.name)
+            }
+            detailFragment.arguments = bundle
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.analyticDetail, detailFragment) // Sửa ID theo layout của bạn
+                .addToBackStack(null)
+                .commit()
+        }
         binding.rvExpenses.layoutManager = LinearLayoutManager(context)
         binding.rvExpenses.adapter = adapter
         binding.tvShowMore.visibility = if (list.size > 6) View.VISIBLE else View.GONE
