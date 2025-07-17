@@ -118,6 +118,12 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
     }
 
     override fun viewListener() {
+        binding.icEdit.setOnClickListener {
+            finish()
+        }
+        binding.ivBack.setOnClickListener {
+            finish()
+        }
         binding.tvAdd.setOnClickListener {
             val category = intent.getSerializableExtra("CATEGORY_DATA") as? Category
             if (category == null) {

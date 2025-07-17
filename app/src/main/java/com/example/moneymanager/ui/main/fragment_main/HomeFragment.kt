@@ -1,5 +1,7 @@
 package com.example.moneymanager.ui.main.fragment_main
 
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
@@ -9,21 +11,27 @@ import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentHomeBinding
 import com.example.moneymanager.model.CurrencyModel
 import com.example.moneymanager.sharePreferent.PreferenceManager
+import com.example.moneymanager.dialog.MonthYearPickerDialog
+import com.example.moneymanager.ui.expense.AddTransactionActivity
 import com.example.moneymanager.ui.main.adapter.HomePagerAdapter
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.ExpensesFragment
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.IncomeFragment
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.LoansFragment
+import com.example.moneymanager.ui.setting.SettingActivity
 import com.example.moneymanager.utils.extensions.collectInLifecycle
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import java.util.Calendar
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
-
+    private var selectedMonth = 0
+    private var selectedYear = 0
+    private var sortByYear = false
+    private lateinit var viewModel: SaveTransactionViewModel
+    private var isVisible = false
     override fun setViewBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding {
         return FragmentHomeBinding.inflate(inflater, container, false)
     }
-    private lateinit var viewModel: SaveTransactionViewModel
-    private var isVisible = false
     private lateinit var pref : PreferenceManager
     private lateinit var currency : CurrencyModel
 
@@ -32,7 +40,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         currency = DataApp.getListCurrency()[pref.getCurrency()]
 
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
-
+        val calendar = Calendar.getInstance()
+        selectedMonth = calendar.get(Calendar.MONTH)
+        selectedYear = calendar.get(Calendar.YEAR)
+        viewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
         val adapter = HomePagerAdapter(this)
         binding.viewPager.adapter = adapter
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -46,6 +57,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun viewListener() {
+        binding.ivSetting.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("EXTRA_TYPE", 4)
+            }
+            showActivity(SettingActivity::class.java,bundle)
+        }
         binding.tvExpenses.setOnClickListener {
             binding.viewPager.currentItem = 0
         }
@@ -55,6 +72,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.tvLoans.setOnClickListener {
             binding.viewPager.currentItem = 2
         }
+
+        binding.tvCalendar.setOnClickListener {
+            val dialog = MonthYearPickerDialog(
+                requireActivity(),
+                selectedYear,
+                selectedMonth,
+                sortByYear
+            ) { year, month, sort ->
+                selectedYear = year
+                selectedMonth = month
+                sortByYear = sort
+                Log.d("MonthYear", "Selected: $month/$year sort by year: $sortByYear")
+                viewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
+            }
+            dialog.show()
+        }
+
         binding.imgVisible.setOnClickListener {
             isVisible = !isVisible
             if (isVisible) {

@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent">
 
-    <!-- Nền chính dùng bg_bg_fragment_home -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="225dp"
@@ -38,6 +37,7 @@
                 android:background="@drawable/bg_10ffff_radius"
                 android:drawableTop="@drawable/ic_expenses2"
                 android:paddingTop="12dp"
+                android:drawablePadding="6dp"
                 android:fontFamily="@font/opensans_400"
                 android:gravity="center"
                 android:text="@string/expenses"
@@ -47,7 +47,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 />
             <TextView
-                android:paddingTop="12dp"
                 android:layout_marginHorizontal="22dp"
                 android:id="@+id/tv_add_income"
                 android:layout_width="0dp"
@@ -58,7 +57,7 @@
                 android:drawablePadding="6dp"
                 android:fontFamily="@font/opensans_400"
                 android:gravity="center"
-                android:padding="12dp"
+                android:paddingTop="12dp"
                 android:text="@string/income"
                 android:textColor="@color/color_B1C7FF"
                 android:textSize="16sp"
@@ -66,7 +65,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 />
             <TextView
-                android:paddingTop="12dp"
                 android:id="@+id/tv_add_loans"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -76,7 +74,7 @@
                 android:drawablePadding="6dp"
                 android:fontFamily="@font/opensans_400"
                 android:gravity="center"
-                android:padding="12dp"
+                android:paddingTop="12dp"
                 android:text="@string/loans"
                 android:textColor="@color/color_B1C7FF"
                 android:textSize="16sp"
