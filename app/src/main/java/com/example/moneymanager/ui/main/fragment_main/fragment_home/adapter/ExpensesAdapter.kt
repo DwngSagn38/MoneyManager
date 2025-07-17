@@ -24,46 +24,36 @@ class ExpensesAdapter(
 
     inner class HeaderViewHolder(val binding: ItemDateHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(header: ExpenseListItem.DateHeader, isFirst: Boolean) {
-            val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) // Định dạng đầu vào
-            val outputFormat = SimpleDateFormat("EEE, MMM dd", Locale.getDefault()) // Định dạng đầu ra
 
+        fun bind(header: ExpenseListItem.DateHeader, isFirst: Boolean) {
+            // Format ngày
+            val inputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("EEE, MMM dd", Locale.getDefault())
             val date = inputFormat.parse(header.date)
-            val formattedDate = outputFormat.format(date!!)
-            binding.tvDate.text = formattedDate
+            binding.tvDate.text = outputFormat.format(date!!)
+
+            // Format số tiền
+            val isNegative = header.totalAmount < 0
+            val amount = abs(header.totalAmount)
+            val amountFormatted = if (amount % 1.0 == 0.0) {
+                amount.toInt().toString()
+            } else {
+                String.format("%.2f", amount)
+            }
+
+            val displayAmount = if (isNegative) "-$$amountFormatted" else "$$amountFormatted"
+            binding.tvTotalAmount.text = displayAmount
 
             if (check == true) {
-                if (header.totalAmount < 0) {
-                    binding.tvTotalAmount.setTextColor(Color.parseColor("#FF2E2E"))
-                    val amount = abs(header.totalAmount)
-                    val formatted = if (amount % 1.0 == 0.0) {
-                        "-$${amount.toInt()}"
-                    } else {
-                        "-$${String.format("%.2f", amount)}"
-                    }
-                    binding.tvTotalAmount.text = formatted
-                } else {
-                    binding.tvTotalAmount.setTextColor(Color.parseColor("#00FF6F"))
-                    val amount = header.totalAmount
-                    val formatted = if (amount % 1.0 == 0.0) {
-                        "$${amount.toInt()}"
-                    } else {
-                        "$${String.format("%.2f", amount)}"
-                    }
-                    binding.tvTotalAmount.text = formatted
-                }
-            } else {
-                val amount = abs(header.totalAmount)
-                val formatted = if (amount % 1.0 == 0.0) {
-                    "-$${amount.toInt()}"
-                } else {
-                    "-$${String.format("%.2f", amount)}"
-                }
-                binding.tvTotalAmount.text = formatted
+                val color = if (isNegative) "#FF2E2E" else "#00FF6F"
+                binding.tvTotalAmount.setTextColor(Color.parseColor(color))
             }
+
+            // Divider
             binding.viewDivider.visibility = if (isFirst) View.GONE else View.VISIBLE
         }
     }
+
 
     inner class ItemViewHolder(val binding: ItemTransitionMainBinding) :
         RecyclerView.ViewHolder(binding.root) {
