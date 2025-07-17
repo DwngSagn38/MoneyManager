@@ -5,7 +5,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.moneymanager.R
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentHomeBinding
+import com.example.moneymanager.model.CurrencyModel
+import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.ui.main.adapter.HomePagerAdapter
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.ExpensesFragment
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.IncomeFragment
@@ -21,8 +24,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
     private lateinit var viewModel: SaveTransactionViewModel
     private var isVisible = false
+    private lateinit var pref : PreferenceManager
+    private lateinit var currency : CurrencyModel
 
     override fun initView() {
+        pref = PreferenceManager(requireContext())
+        currency = DataApp.getListCurrency()[pref.getCurrency()]
+
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
 
         val adapter = HomePagerAdapter(this)
@@ -51,7 +59,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             isVisible = !isVisible
             if (isVisible) {
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_invisible)
-                binding.tvBalance.text = "$ %.2f".format(viewModel.totalBalance.value)
+                binding.tvBalance.text = currency.currency + " " + viewModel.totalBalance.value
             } else {
                 binding.tvBalance.text = getString(R.string.invisible_balance)
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_visible)
@@ -71,7 +79,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun dataObservable() {
         viewModel.totalBalance.collectInLifecycle(viewLifecycleOwner) { balance ->
             if (isVisible) {
-                binding.tvBalance.text = "$ %.2f".format(balance)
+                binding.tvBalance.text = currency.currency + " " + balance
             }
         }
     }

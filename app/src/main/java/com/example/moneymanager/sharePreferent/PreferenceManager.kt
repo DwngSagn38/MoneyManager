@@ -11,32 +11,16 @@ class PreferenceManager(context: Context) {
 
     companion object {
         private const val PREF_NAME = "ghost_detector_prefs"
-        private const val KEY_FAVORITE_IDS = "KEY_FAVORITE_IDS"
+        private const val KEY_CURRENCY = "KEY_CURRENCY"
 
     }
 
-    fun getFavoriteIds(): MutableSet<String> {
-        return sharedPref.getStringSet(KEY_FAVORITE_IDS, emptySet())?.toMutableSet() ?: mutableSetOf()
+    fun getCurrency(): Int {
+        return sharedPref.getInt(KEY_CURRENCY, 0)
     }
 
-
-    fun saveFavoriteId(id: String) {
-        val ids = getFavoriteIds()
-        ids.add(id)
-        sharedPref.edit().putStringSet(KEY_FAVORITE_IDS, ids).apply()
-        Log.d("PreferenceManager", "saveFavoriteId: $ids")
-    }
-
-    fun removeFavoriteId(id: String) {
-        val ids = getFavoriteIds()
-        ids.remove(id)
-        sharedPref.edit().putStringSet(KEY_FAVORITE_IDS, ids).apply()
-        Log.d("PreferenceManager", "removeFavoriteId: $ids")
-    }
-
-
-    fun isFavorite(id: String): Boolean {
-        return getFavoriteIds().contains(id)
+    fun saveCurrency(id: Int) {
+        sharedPref.edit().putInt(KEY_CURRENCY, id).apply()
     }
 }
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:paddingHorizontal="6dp"
+    android:paddingVertical="6dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutItem"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_item_currency"
+        android:paddingHorizontal="10dp">
+
+        <ImageView
+            android:id="@+id/icLang"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            tools:src="@drawable/ic_launcher_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="English"
+            android:fontFamily="@font/opensans_600"
+            app:layout_constraintTop_toTopOf="@+id/icLang"
+            app:layout_constraintBottom_toBottomOf="@+id/icLang"
+            app:layout_constraintStart_toEndOf="@+id/icLang"
+            android:layout_marginStart="8dp"/>
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            tools:text="English"
+            android:fontFamily="@font/opensans_400"
+            app:layout_constraintTop_toTopOf="@+id/icLang"
+            app:layout_constraintBottom_toBottomOf="@+id/icLang"
+            app:layout_constraintStart_toEndOf="@+id/txtCountry"
+            android:layout_marginStart="8dp" />
+
+        <TextView
+            android:id="@+id/txtCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            tools:text="$"
+            android:textColor="@color/white"
+            android:fontFamily="@font/opensans_400"
+            app:layout_constraintTop_toTopOf="@+id/icLang"
+            app:layout_constraintBottom_toBottomOf="@+id/icLang"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
