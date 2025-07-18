@@ -16,6 +16,12 @@
             android:name=".ui.set_your_budget.SetYourBudgetActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.annual_report.AnnualReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.annual_category_report.AnnualCategoryReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.currency.BaseCurrencyActivity"
             android:exported="false" />
         <activity

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -293,6 +294,78 @@ object AnalyticsChartHelper {
             invalidate()
         }
 
+    }
+    fun setupBarChartFor12Months(
+        context: Context,
+        barChart: BarChart,
+        transactions: List<TransactionEntity>,
+        year: Int
+    ) {
+        val monthlyTotals = FloatArray(12)
+
+        for (transaction in transactions) {
+            val parts = transaction.date.split("/")
+            if (parts.size != 3) continue
+
+            val day = parts[0].toIntOrNull() ?: continue
+            val month = parts[1].toIntOrNull() ?: continue
+            val transYear = parts[2].toIntOrNull() ?: continue
+
+            if (transYear == year) {
+                val amount = transaction.amount
+                monthlyTotals[month - 1] += amount
+            }
+        }
+
+        val entries = monthlyTotals.mapIndexed { index, total ->
+            BarEntry(index.toFloat(), total)
+        }
+
+        val barDataSet = BarDataSet(entries, "Monthly Total").apply {
+            color = Color.parseColor("#6480F1") // ✅ Màu được yêu cầu
+            valueTextColor = Color.WHITE
+            valueTextSize = 12f
+        }
+
+        val barData = BarData(barDataSet).apply {
+            barWidth = 0.4f
+        }
+
+        val monthLabels = listOf(
+            "T1", "T2", "T3", "T4", "T5", "T6",
+            "T7", "T8", "T9", "T10", "T11", "T12"
+        )
+
+        barChart.apply {
+            data = barData
+            renderer = RoundedBarChartRenderer( // ✅ gán renderer SAU khi đã có data
+                this,
+                animator,
+                viewPortHandler,
+                radius = 10f
+            )
+            renderer.initBuffers()
+            description.isEnabled = false
+            axisRight.isEnabled = false
+            val typeface = ResourcesCompat.getFont(context, R.font.opensans_600)
+            xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(monthLabels)
+                position = XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                setDrawGridLines(false)
+                textColor = Color.WHITE
+                textSize = 10f
+                this.typeface = typeface  // 👈 gán font tại đây
+            }
+            axisLeft.apply {
+                isEnabled = true
+                axisMinimum = 0f
+                textColor = Color.WHITE
+            }
+            legend.isEnabled = false
+            animateY(1000)
+            invalidate()
+        }
     }
 
 
