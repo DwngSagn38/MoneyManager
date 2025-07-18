@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.ItemDateHeaderBinding
 import com.example.moneymanager.databinding.ItemTransitionMainBinding
+import com.example.moneymanager.utils.extensions.formatCurrency
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -36,12 +38,12 @@ class ExpensesAdapter(
             val isNegative = header.totalAmount < 0
             val amount = abs(header.totalAmount)
             val amountFormatted = if (amount % 1.0 == 0.0) {
-                amount.toInt().toString()
+                formatCurrency(amount, DataApp.getCurrency().country)
             } else {
-                String.format("%.2f", amount)
+                formatCurrency(amount, DataApp.getCurrency().country)
             }
 
-            val displayAmount = if (isNegative) "-$$amountFormatted" else "$$amountFormatted"
+            val displayAmount = if (isNegative) "-$amountFormatted" else "$amountFormatted"
             binding.tvTotalAmount.text = displayAmount
 
             if (check == true) {
@@ -63,9 +65,9 @@ class ExpensesAdapter(
             binding.tvName.text = transaction.name
             val amount = transaction.amount.toDouble()
             val formatted = if (amount % 1.0 == 0.0) {
-                "$${amount.toInt()}"
+                formatCurrency(amount, DataApp.getCurrency().country)
             } else {
-                "$${String.format("%.2f", amount)}"
+                formatCurrency(amount, DataApp.getCurrency().country)
             }
             binding.tvAmount.text = formatted
             binding.tvTime.text = transaction.time

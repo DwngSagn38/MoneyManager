@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentExpensesBinding
 import com.example.moneymanager.databinding.FragmentLoansBinding
 import com.example.moneymanager.model.TransactionEntity
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpenseListItem
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpensesAdapter
+import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import com.example.moneymanager.widget.gone
@@ -50,8 +52,8 @@ class LoansFragment:BaseFragment<FragmentLoansBinding>() {
             val grouped = filtered.filter { it.type == "Loans" }
             totalLoans = grouped.filter { it.check == true }.sumOf { it.amount.toDouble() }.toFloat()
             totalBorrower = grouped.filter { it.check == false }.sumOf { it.amount.toDouble() }.toFloat()
-            binding.tvLoans.text = "$%.2f".format(totalLoans)
-            binding.tvBorrowed.text = "$%.2f".format(totalBorrower)
+            binding.tvLoans.text = formatCurrency(totalLoans.toDouble(), DataApp.getCurrency().country)
+            binding.tvBorrowed.text = formatCurrency(totalBorrower.toDouble(), DataApp.getCurrency().country)
             val groupedList = groupTransactionsByDate(grouped)
             if (groupedList.size != 0) {
                 binding.recyclerView.visible()

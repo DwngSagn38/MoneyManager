@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentExpensesBinding
 import com.example.moneymanager.model.TransactionEntity
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpenseListItem
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpensesAdapter
+import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.utils.helper.AnalyticsChartHelper
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
@@ -50,7 +52,7 @@ class ExpensesFragment : BaseFragment<FragmentExpensesBinding>() {
         viewModel.filteredTransactions.observe(viewLifecycleOwner) { filtered ->
             val grouped = filtered.filter { it.type == "Expense" }
             totalExpenses = grouped.sumOf { it.amount.toDouble() }.toFloat()
-            binding.tvExpensesTotal.text = "$%.2f".format(totalExpenses)
+            binding.tvExpensesTotal.text = formatCurrency(totalExpenses.toDouble(), DataApp.getCurrency().country)
             val groupedList = groupTransactionsByDate(grouped)
             if (groupedList.size != 0) {
                 binding.recyclerView.visible()

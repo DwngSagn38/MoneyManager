@@ -10,15 +10,19 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanager.R
+import com.example.moneymanager.custom_view.RoundedBarChartRenderer
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentExpenseAnalyticBinding
 import com.example.moneymanager.model.TransactionEntity
 import com.example.moneymanager.ui.analytics.AnalyticsDetailFragment
 import com.example.moneymanager.ui.analytics.adapter.Expense1Adapter
 import com.example.moneymanager.ui.analytics.adapter.ExpenseAdapter
+import com.example.moneymanager.utils.extensions.formatCurrency
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 
 object AnalyticsChartHelper {
 
@@ -55,19 +59,29 @@ object AnalyticsChartHelper {
         val barEntries = list.mapIndexed { index, cat ->
             BarEntry(index.toFloat(), cat.amount.toFloat())
         }
+
         val barDataSet = BarDataSet(barEntries, "").apply {
             colors = list.map { it.color }
+            valueTextColor = Color.TRANSPARENT
         }
 
         val barData = BarData(barDataSet).apply {
             barWidth = 0.3f
-            setValueTextColor(Color.WHITE)
         }
 
         barChart.apply {
             data = barData
+            renderer = RoundedBarChartRenderer( // ✅ gán renderer SAU khi đã có data
+                this,
+                animator,
+                viewPortHandler,
+                radius = 20f
+            )
+            renderer.initBuffers()
+
             description.isEnabled = false
             axisRight.isEnabled = false
+
             xAxis.apply {
                 valueFormatter = IndexAxisValueFormatter(list.map { it.name })
                 position = XAxis.XAxisPosition.BOTTOM
@@ -75,12 +89,26 @@ object AnalyticsChartHelper {
                 granularity = 1f
                 setDrawGridLines(false)
             }
-            axisLeft.textColor = Color.WHITE
+
+            axisLeft.apply {
+                textColor = Color.WHITE
+                axisMinimum = 0f // Luôn bắt đầu từ 0
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return formatCurrency(value.toDouble(), DataApp.getCurrency().country)
+                    }
+                }
+            }
+
             legend.isEnabled = false
+            setScaleEnabled(false)           // Tắt pinch zoom (cả X và Y)
+            isDoubleTapToZoomEnabled = false // Tắt double-tap để zoom
+            setPinchZoom(false)
             animateY(800)
             invalidate()
         }
     }
+
 
     fun setupRecyclerView(
         context: Context,
@@ -196,9 +224,22 @@ object AnalyticsChartHelper {
         )
 
         val barDataSet = BarDataSet(entries, "").apply {
-            color = ContextCompat.getColor(context, R.color.color_6480F1) // hoặc chọn 2 màu khác nhau nếu muốn
+            colors = listOf(
+                ContextCompat.getColor(context, R.color.color_6480F1),
+                ContextCompat.getColor(context, R.color.main)
+            )
+//            color = ContextCompat.getColor(context, R.color.color_6480F1)
             valueTextColor = Color.WHITE
             valueTextSize = 12f
+        }
+
+
+        barDataSet.valueFormatter = object : ValueFormatter() {
+            override fun getBarLabel(barEntry: BarEntry?): String {
+                val value = barEntry?.y ?: 0f
+                val currencySymbol = formatCurrency(value.toDouble(), DataApp.getCurrency().country)
+                return "$currencySymbol"
+            }
         }
 
         val barData = BarData(barDataSet).apply {
@@ -207,6 +248,15 @@ object AnalyticsChartHelper {
 
         barChart.apply {
             data = barData
+            notifyDataSetChanged() // ✅ cập nhật lại dữ liệu → khởi tạo mBarBuffers
+            renderer = RoundedBarChartRenderer( // ✅ gán renderer SAU khi đã có data
+                this,
+                animator,
+                viewPortHandler,
+                radius = 20f
+            )
+            renderer.initBuffers()
+
             description.isEnabled = false
             axisRight.isEnabled = false
             xAxis.apply {
@@ -216,11 +266,33 @@ object AnalyticsChartHelper {
                 setDrawGridLines(false)
                 textColor = Color.WHITE
             }
-            axisLeft.textColor = Color.WHITE
+            axisLeft.apply {
+                isEnabled = true                // vẫn bật để vẽ đường $0
+                axisMinimum = 0f               // giá trị thấp nhất là 0
+                axisMaximum = maxOf(thisMonthTotal, lastMonthTotal) * 1.2f // tuỳ bạn
+                setDrawAxisLine(false)         // không vẽ cột trục Y
+                setDrawGridLines(false)        // không vẽ các đường kẻ ngang
+                textColor = Color.WHITE
+                textSize = 12f
+                setLabelCount(1, true)
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return if (value == 0f) {
+                            formatCurrency(0.0, DataApp.getCurrency().country) // chỉ hiện $0
+                        } else {
+                            "" // các giá trị khác không hiện gì
+                        }
+                    }
+                 }
+            }
             legend.isEnabled = false
+            setScaleEnabled(false)           // Tắt pinch zoom (cả X và Y)
+            isDoubleTapToZoomEnabled = false // Tắt double-tap để zoom
+            setPinchZoom(false)
             animateY(800)
             invalidate()
         }
+
     }
     fun setupBarChartFor12Months(
         context: Context,

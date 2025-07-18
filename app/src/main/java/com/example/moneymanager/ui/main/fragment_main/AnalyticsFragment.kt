@@ -6,10 +6,14 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.moneymanager.R
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentAnalyticsBinding
 import com.example.moneymanager.dialog.MonthYearPickerDialog
+import com.example.moneymanager.model.CurrencyModel
+import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.ui.analytics.adapter.AnalyticsPagerAdapter
 import com.example.moneymanager.utils.extensions.collectInLifecycle
+import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
@@ -30,6 +34,7 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
     private lateinit var viewModel: SaveTransactionViewModel
 
     override fun initView() {
+
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
         val calendar = Calendar.getInstance()
         selectedMonth = calendar.get(Calendar.MONTH)
@@ -81,7 +86,8 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
             isVisible = !isVisible
             if (isVisible) {
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_invisible)
-                binding.tvBalance.text = "$ %.2f".format(viewModel.totalBalance.value)
+                val balance = viewModel.totalBalance.value
+                binding.tvBalance.text = formatCurrency(balance.toDouble(), DataApp.getCurrency().country)
             } else {
                 binding.tvBalance.text = getString(R.string.invisible_balance)
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_visible)
@@ -113,7 +119,7 @@ class AnalyticsFragment : BaseFragment<FragmentAnalyticsBinding>() {
     override fun dataObservable() {
         viewModel.totalBalance.collectInLifecycle(viewLifecycleOwner) { balance ->
             if (isVisible) {
-                binding.tvBalance.text = "$ %.2f".format(balance)
+                binding.tvBalance.text = formatCurrency(balance.toDouble(), DataApp.getCurrency().country)
             }
         }
     }

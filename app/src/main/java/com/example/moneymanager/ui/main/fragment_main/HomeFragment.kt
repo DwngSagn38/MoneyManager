@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.moneymanager.R
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentHomeBinding
+import com.example.moneymanager.model.CurrencyModel
+import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.dialog.MonthYearPickerDialog
 import com.example.moneymanager.ui.expense.AddTransactionActivity
 import com.example.moneymanager.ui.main.adapter.HomePagerAdapter
@@ -16,6 +19,7 @@ import com.example.moneymanager.ui.main.fragment_main.fragment_home.IncomeFragme
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.LoansFragment
 import com.example.moneymanager.ui.setting.SettingActivity
 import com.example.moneymanager.utils.extensions.collectInLifecycle
+import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
@@ -31,6 +35,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initView() {
+
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
         val calendar = Calendar.getInstance()
         selectedMonth = calendar.get(Calendar.MONTH)
@@ -85,7 +90,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             isVisible = !isVisible
             if (isVisible) {
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_invisible)
-                binding.tvBalance.text = "$ %.2f".format(viewModel.totalBalance.value)
+                val balance = viewModel.totalBalance.value
+                binding.tvBalance.text = formatCurrency(balance.toDouble(), DataApp.getCurrency().country)
             } else {
                 binding.tvBalance.text = getString(R.string.invisible_balance)
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_visible)
@@ -105,7 +111,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun dataObservable() {
         viewModel.totalBalance.collectInLifecycle(viewLifecycleOwner) { balance ->
             if (isVisible) {
-                binding.tvBalance.text = "$ %.2f".format(balance)
+                binding.tvBalance.text = formatCurrency(balance.toDouble(), DataApp.getCurrency().country)
             }
         }
     }

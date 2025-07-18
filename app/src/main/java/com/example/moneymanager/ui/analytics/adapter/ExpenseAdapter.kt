@@ -13,7 +13,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.model.TransactionEntity
+import com.example.moneymanager.utils.extensions.formatCurrency
 
 class ExpenseAdapter(
     private var list: List<TransactionEntity>,
@@ -47,7 +49,7 @@ class ExpenseAdapter(
         val item = list[position]
         holder.itemView.setOnClickListener { onItemClicked(item) }
         holder.tvName.text = item.name
-        holder.tvAmount.text = "$${item.amount.toFloat()}"
+        holder.tvAmount.text = formatCurrency(item.amount.toDouble(), DataApp.getCurrency().country)
         holder.imgIcon.setImageResource(item.img)
 
         holder.progressBar.progress = ((item.amount.toFloat() / totalAmount) * 100).toInt()
