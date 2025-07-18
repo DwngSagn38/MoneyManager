@@ -48,8 +48,7 @@
             android:fontFamily="@font/opensans_400"
             app:layout_constraintTop_toTopOf="@+id/icLang"
             app:layout_constraintBottom_toBottomOf="@+id/icLang"
-            app:layout_constraintStart_toEndOf="@+id/txtCountry"
-            android:layout_marginStart="8dp" />
+            app:layout_constraintStart_toEndOf="@+id/txtCountry" />
 
         <TextView
             android:id="@+id/txtCurrency"

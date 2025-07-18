@@ -5,6 +5,7 @@ import com.example.moneymanager.R
 import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.ActivityBaseCurrencyBinding
+import com.example.moneymanager.model.CurrencyModel
 import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.ui.main.MainActivity
 import com.example.moneymanager.widget.tap
@@ -18,6 +19,7 @@ class BaseCurrencyActivity : BaseActivity<ActivityBaseCurrencyBinding>() {
     private lateinit var adapter: CurrencyAdapter
     private lateinit var pref : PreferenceManager
     private var idCurrency = 0
+    private lateinit var currency : CurrencyModel
 
     override fun initView() {
         pref = PreferenceManager(this)
@@ -28,6 +30,7 @@ class BaseCurrencyActivity : BaseActivity<ActivityBaseCurrencyBinding>() {
         binding.ivBack.tap { finish() }
         binding.ivDone.tap {
             pref.saveCurrency(idCurrency)
+            DataApp.setCurrency(currency)
             showActivity(MainActivity::class.java)
         }
     }
@@ -39,6 +42,7 @@ class BaseCurrencyActivity : BaseActivity<ActivityBaseCurrencyBinding>() {
         adapter = CurrencyAdapter{
             binding.ivDone.visible()
             idCurrency = it.id
+            currency = it
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter

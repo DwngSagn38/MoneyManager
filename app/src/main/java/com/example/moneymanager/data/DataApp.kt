@@ -4,6 +4,14 @@ import com.example.moneymanager.R
 import com.example.moneymanager.model.CurrencyModel
 
 object DataApp {
+    private var currency: CurrencyModel? = null
+
+    fun setCurrency(currency: CurrencyModel) {
+        this.currency = currency
+    }
+    fun getCurrency(): CurrencyModel {
+        return currency ?: getListCurrency()[0]
+    }
     fun getListCurrency() : List<CurrencyModel> {
         return listOf(
             CurrencyModel(0,R.drawable.fl_gbp_uk_pound,"GBP", " - UK Pound", "£"),

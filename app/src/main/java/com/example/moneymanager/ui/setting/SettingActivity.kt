@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
 import com.example.moneymanager.base.BaseActivity
+import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.ActivitySettingBinding
 import com.example.moneymanager.model.Category
+import com.example.moneymanager.model.CurrencyModel
 import com.example.moneymanager.sharePreferent.PreferenceManager
+import com.example.moneymanager.ui.currency.BaseCurrencyActivity
 import com.example.moneymanager.ui.expense.CategoryAdapter
 import com.example.moneymanager.ui.expense.SaveTransactionActivity
 import com.example.moneymanager.ui.language.LanguageActivity
@@ -28,6 +31,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     private lateinit var prefs: PreferenceManager
     lateinit var fullList: List<Category>
     lateinit var adapter: CategoryAdapter
+    private lateinit var currency : CurrencyModel
 
     override fun setViewBinding(): ActivitySettingBinding {
         return ActivitySettingBinding.inflate(layoutInflater)
@@ -38,6 +42,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         fullList = getCatagoryList(type)
         prefs = PreferenceManager(this)
         helperMenu = HelperMenu(this)
+        currency = DataApp.getListCurrency()[prefs.getCurrency()]
+
 //        prefs.apply {
 //            binding.swSound.isChecked = getCheckSound()
 //        }
@@ -58,6 +64,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             clAnnualCategory.tap {
                 showAddTransactionBottomSheet()
             }
+            clCurrency.tap { showActivity(BaseCurrencyActivity::class.java) }
+
+            tvCurrencyCurrent.text = currency.country
         }
     }
 

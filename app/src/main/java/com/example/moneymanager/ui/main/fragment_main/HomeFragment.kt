@@ -19,6 +19,7 @@ import com.example.moneymanager.ui.main.fragment_main.fragment_home.IncomeFragme
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.LoansFragment
 import com.example.moneymanager.ui.setting.SettingActivity
 import com.example.moneymanager.utils.extensions.collectInLifecycle
+import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
@@ -32,12 +33,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun setViewBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding {
         return FragmentHomeBinding.inflate(inflater, container, false)
     }
-    private lateinit var pref : PreferenceManager
-    private lateinit var currency : CurrencyModel
 
     override fun initView() {
-        pref = PreferenceManager(requireContext())
-        currency = DataApp.getListCurrency()[pref.getCurrency()]
 
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
         val calendar = Calendar.getInstance()
@@ -93,7 +90,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             isVisible = !isVisible
             if (isVisible) {
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_invisible)
-                binding.tvBalance.text = currency.currency + " " + viewModel.totalBalance.value
+                val balance = viewModel.totalBalance.value
+                binding.tvBalance.text = formatCurrency(balance.toDouble(), DataApp.getCurrency().country)
             } else {
                 binding.tvBalance.text = getString(R.string.invisible_balance)
                 binding.imgVisible.setImageResource(R.drawable.ic_eye_visible)
@@ -113,7 +111,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun dataObservable() {
         viewModel.totalBalance.collectInLifecycle(viewLifecycleOwner) { balance ->
             if (isVisible) {
-                binding.tvBalance.text = currency.currency + " " + balance
+                binding.tvBalance.text = formatCurrency(balance.toDouble(), DataApp.getCurrency().country)
             }
         }
     }
