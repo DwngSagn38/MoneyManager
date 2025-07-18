@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/boder_232059"
+    android:layout_height="48dp">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            android:id="@+id/tvMonth"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Tháng 1"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:fontFamily="@font/opensans_600" />
+
+        <TextView
+            android:id="@+id/tvAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1,200,000đ"
+            android:textColor="#AEB7DD"
+            android:textSize="15sp"
+            android:fontFamily="@font/opensans_700" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

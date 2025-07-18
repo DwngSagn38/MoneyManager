@@ -16,6 +16,7 @@ import com.example.moneymanager.model.Category
 import com.example.moneymanager.model.CurrencyModel
 import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.ui.annual_category_report.AnnualCategoryReportActivity
+import com.example.moneymanager.ui.annual_report.AnnualReportActivity
 import com.example.moneymanager.ui.currency.BaseCurrencyActivity
 import com.example.moneymanager.ui.expense.CategoryAdapter
 import com.example.moneymanager.ui.expense.SaveTransactionActivity
@@ -68,7 +69,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             clCurrency.tap { showActivity(BaseCurrencyActivity::class.java) }
 
             tvCurrencyCurrent.text = currency.country
+            clAnnualReport.tap { showActivity(AnnualReportActivity::class.java) }
         }
+
     }
 
 //    private fun checkSwitch() {

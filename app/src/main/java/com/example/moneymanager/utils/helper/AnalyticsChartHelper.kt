@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -337,15 +338,24 @@ object AnalyticsChartHelper {
 
         barChart.apply {
             data = barData
+            renderer = RoundedBarChartRenderer( // ✅ gán renderer SAU khi đã có data
+                this,
+                animator,
+                viewPortHandler,
+                radius = 10f
+            )
+            renderer.initBuffers()
             description.isEnabled = false
             axisRight.isEnabled = false
+            val typeface = ResourcesCompat.getFont(context, R.font.opensans_600)
             xAxis.apply {
                 valueFormatter = IndexAxisValueFormatter(monthLabels)
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
                 setDrawGridLines(false)
                 textColor = Color.WHITE
-                labelRotationAngle = -45f
+                textSize = 10f
+                this.typeface = typeface  // 👈 gán font tại đây
             }
             axisLeft.apply {
                 isEnabled = true
