@@ -29,13 +29,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var selectedYear = 0
     private var sortByYear = false
     private lateinit var viewModel: SaveTransactionViewModel
+    private lateinit var pref : PreferenceManager
     private var isVisible = false
     override fun setViewBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding {
         return FragmentHomeBinding.inflate(inflater, container, false)
     }
 
     override fun initView() {
-
+        pref = PreferenceManager(requireContext())
         viewModel = ViewModelProvider(requireActivity()).get(SaveTransactionViewModel::class.java)
         val calendar = Calendar.getInstance()
         selectedMonth = calendar.get(Calendar.MONTH)

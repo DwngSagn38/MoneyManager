@@ -8,6 +8,7 @@ import com.example.moneymanager.databinding.ActivityBaseCurrencyBinding
 import com.example.moneymanager.model.CurrencyModel
 import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.ui.main.MainActivity
+import com.example.moneymanager.ui.set_your_budget.SetYourBudgetActivity
 import com.example.moneymanager.widget.tap
 import com.example.moneymanager.widget.visible
 
@@ -30,8 +31,14 @@ class BaseCurrencyActivity : BaseActivity<ActivityBaseCurrencyBinding>() {
         binding.ivBack.tap { finish() }
         binding.ivDone.tap {
             pref.saveCurrency(idCurrency)
+            pref.saveCheckCurrency(true)
             DataApp.setCurrency(currency)
-            showActivity(MainActivity::class.java)
+            val checkBudget = pref.getYourBudget()
+            if (checkBudget){
+                showActivity(MainActivity::class.java)
+            }else{
+                showActivity(SetYourBudgetActivity::class.java)
+            }
         }
     }
 

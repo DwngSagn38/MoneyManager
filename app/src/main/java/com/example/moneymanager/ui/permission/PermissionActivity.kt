@@ -2,7 +2,9 @@ package  com.example.moneymanager.ui.permission
 
 import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.databinding.ActivityPermissionBinding
+import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.sharePreferent.SharePrefUtils
+import com.example.moneymanager.ui.currency.BaseCurrencyActivity
 import com.example.moneymanager.ui.main.MainActivity
 import com.example.moneymanager.utils.helper.Default.ACCESS_COARSE_LOCATION
 import com.example.moneymanager.utils.helper.Default.ACCESS_FINE_LOCATION
@@ -35,7 +37,12 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
             }
             tvContinue.tap {
                 SharePrefUtils.forceGoToMain(this@PermissionActivity)
-                showActivity(MainActivity::class.java)
+                val currency = PreferenceManager(this@PermissionActivity).getCheckCurrency()
+                if (currency){
+                    showActivity(MainActivity::class.java)
+                }else{
+                    showActivity(BaseCurrencyActivity::class.java)
+                }
                 finishAffinity()
             }
         }

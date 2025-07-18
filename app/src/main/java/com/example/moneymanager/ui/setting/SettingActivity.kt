@@ -28,7 +28,6 @@ import java.io.File
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     private var helperMenu: HelperMenu? = null
-    private lateinit var prefs: PreferenceManager
     lateinit var fullList: List<Category>
     lateinit var adapter: CategoryAdapter
     private lateinit var currency : CurrencyModel
@@ -40,9 +39,8 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
     override fun initView() {
         val type = intent.getIntExtra("EXTRA_TYPE", -1)
         fullList = getCatagoryList(type)
-        prefs = PreferenceManager(this)
         helperMenu = HelperMenu(this)
-        currency = DataApp.getListCurrency()[prefs.getCurrency()]
+        currency = DataApp.getCurrency()
 
 //        prefs.apply {
 //            binding.swSound.isChecked = getCheckSound()
@@ -64,7 +62,11 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
             clAnnualCategory.tap {
                 showAddTransactionBottomSheet()
             }
-            clCurrency.tap { showActivity(BaseCurrencyActivity::class.java) }
+            clCurrency.tap {
+                val intent = Intent(this@SettingActivity, BaseCurrencyActivity::class.java)
+                intent.putExtra("idCurrency", currency.id)
+                startActivity(intent)
+            }
 
             tvCurrencyCurrent.text = currency.country
         }

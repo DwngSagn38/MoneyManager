@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.moneymanager.database.AppDatabase
 import com.example.moneymanager.model.ExpenseCategory
 import com.example.moneymanager.model.TransactionEntity
+import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.ui.main.fragment_main.fragment_home.adapter.ExpenseListItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,6 @@ import kotlinx.coroutines.launch
 
 class SaveTransactionViewModel(application: Application) : AndroidViewModel(application) {
     private val dao = AppDatabase.getDatabase(application).transactionDao()
-
     val selectedDate = MutableLiveData<Triple<Int, Int, Boolean>>()
 
     // To observe all transactions
@@ -62,11 +62,12 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
                 _totalIncome,
                 _totalExpenses,
                 _totalLoans,
-                _totalBorrowed
+                _totalBorrowed,
             ) { income, expenses, loans, borrowed ->
                 income - expenses + (loans - borrowed)
             }.collect { balance ->
                 _totalBalance.value = balance
+                Log.d("SaveTransactionVM", "Total balance updated: $balance")
             }
         }
     }
@@ -177,7 +178,4 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
             _twoMonthsTransactions.postValue(filtered)
         }
     }
-
-
-
 }

@@ -48,7 +48,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     }
 
     private fun startIntro() {
-        showActivity(MainActivity::class.java)
+        showActivity(LanguageStartActivity::class.java)
         finish()
     }
 

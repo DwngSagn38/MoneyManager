@@ -7,7 +7,9 @@ import androidx.viewpager.widget.ViewPager
 import com.example.moneymanager.R
 import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.databinding.ActivityIntroBinding
+import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.sharePreferent.SharePrefUtils
+import com.example.moneymanager.ui.currency.BaseCurrencyActivity
 import com.example.moneymanager.ui.main.MainActivity
 import com.example.moneymanager.ui.permission.PermissionActivity
 
@@ -98,7 +100,12 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>() {
 
     private fun startNextScreen() {
         if (SharePrefUtils.isGoToMain(this)) {
+            val currency = PreferenceManager(this).getCheckCurrency()
+            if (currency){
                 showActivity(MainActivity::class.java)
+            }else{
+                showActivity(BaseCurrencyActivity::class.java)
+            }
         } else {
             showActivity(PermissionActivity::class.java)
         }
