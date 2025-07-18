@@ -13,6 +13,7 @@ import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.databinding.ActivitySettingBinding
 import com.example.moneymanager.model.Category
 import com.example.moneymanager.sharePreferent.PreferenceManager
+import com.example.moneymanager.ui.annual_category_report.AnnualCategoryReportActivity
 import com.example.moneymanager.ui.expense.CategoryAdapter
 import com.example.moneymanager.ui.expense.SaveTransactionActivity
 import com.example.moneymanager.ui.language.LanguageActivity
@@ -80,7 +81,7 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         val recyclerViewCategory = view.findViewById<RecyclerView>(R.id.recyclerViewCategory)
 
         adapter = CategoryAdapter(fullList) { category ->
-            val intent = Intent(this, SaveTransactionActivity::class.java)
+            val intent = Intent(this, AnnualCategoryReportActivity::class.java)
             intent.putExtra("CATEGORY_DATA", category)
             startActivity(intent)
         }

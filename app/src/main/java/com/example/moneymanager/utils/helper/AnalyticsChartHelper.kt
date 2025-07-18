@@ -222,6 +222,69 @@ object AnalyticsChartHelper {
             invalidate()
         }
     }
+    fun setupBarChartFor12Months(
+        context: Context,
+        barChart: BarChart,
+        transactions: List<TransactionEntity>,
+        year: Int
+    ) {
+        val monthlyTotals = FloatArray(12)
+
+        for (transaction in transactions) {
+            val parts = transaction.date.split("/")
+            if (parts.size != 3) continue
+
+            val day = parts[0].toIntOrNull() ?: continue
+            val month = parts[1].toIntOrNull() ?: continue
+            val transYear = parts[2].toIntOrNull() ?: continue
+
+            if (transYear == year) {
+                val amount = transaction.amount
+                monthlyTotals[month - 1] += amount
+            }
+        }
+
+        val entries = monthlyTotals.mapIndexed { index, total ->
+            BarEntry(index.toFloat(), total)
+        }
+
+        val barDataSet = BarDataSet(entries, "Monthly Total").apply {
+            color = Color.parseColor("#6480F1") // ✅ Màu được yêu cầu
+            valueTextColor = Color.WHITE
+            valueTextSize = 12f
+        }
+
+        val barData = BarData(barDataSet).apply {
+            barWidth = 0.4f
+        }
+
+        val monthLabels = listOf(
+            "T1", "T2", "T3", "T4", "T5", "T6",
+            "T7", "T8", "T9", "T10", "T11", "T12"
+        )
+
+        barChart.apply {
+            data = barData
+            description.isEnabled = false
+            axisRight.isEnabled = false
+            xAxis.apply {
+                valueFormatter = IndexAxisValueFormatter(monthLabels)
+                position = XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                setDrawGridLines(false)
+                textColor = Color.WHITE
+                labelRotationAngle = -45f
+            }
+            axisLeft.apply {
+                isEnabled = true
+                axisMinimum = 0f
+                textColor = Color.WHITE
+            }
+            legend.isEnabled = false
+            animateY(1000)
+            invalidate()
+        }
+    }
 
 
     fun groupByTransaction(list: List<TransactionEntity>): List<TransactionEntity> {

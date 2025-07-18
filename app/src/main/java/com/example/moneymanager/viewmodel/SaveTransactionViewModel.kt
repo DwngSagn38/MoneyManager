@@ -56,7 +56,6 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
 
     init {
         fetchAllTransactions()
-
         viewModelScope.launch {
             combine(
                 _totalIncome,
@@ -70,6 +69,22 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
             }
         }
     }
+    suspend fun getTransactionsByYear(year: Int): List<TransactionEntity> {
+        val all = dao.getAllTransactions()
+
+        return all.filter { transaction ->
+            try {
+                val parts = transaction.date.split("/") // dd/MM/yyyy
+                if (parts.size != 3) return@filter false
+
+                val itemYear = parts[2].toInt()
+                itemYear == year
+            } catch (e: Exception) {
+                false
+            }
+        }
+    }
+
 
     fun saveTransaction(transaction: TransactionEntity) {
         viewModelScope.launch(Dispatchers.IO) {
