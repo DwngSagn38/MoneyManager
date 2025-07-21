@@ -58,6 +58,7 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
             if (budget != null) {
                 val updated = budget.copy(budget = newBudget)
                 dao.updateBudget(updated)
+                Log.d("BudgetViewModel", "Updated budget: $updated")
                 fetchAllBudget()
             }
         }

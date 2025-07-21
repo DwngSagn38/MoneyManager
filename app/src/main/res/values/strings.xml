@@ -76,7 +76,9 @@
     <string name="please_enter_your_budget">Please enter your budget. The finance manager will help you manage your money.</string>
     <string name="add_your_first_expense_to_get_started">Add your first expense to get started!</string>
     <string name="spent">Spent:</string>
+    <string name="remaining">Remaining</string>
     <string name="budget_details">Budget Details</string>
+    <string name="budget">Budget</string>
 
     <string name="average">Average</string>
     <string name="january">January</string>

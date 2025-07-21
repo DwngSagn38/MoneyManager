@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.moneymanager.R
 import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentBudgetBinding
+import com.example.moneymanager.dialog.EditBudgetBottomSheet
 import com.example.moneymanager.dialog.MonthYearPickerDialog
 import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.view.base.BaseFragment
@@ -33,6 +34,9 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
     private var selectedMonth = 0
     private var selectedYear = 0
     private var sortByYear = false
+    private var spent = 0f
+    private var budget = 0f
+    private var remainingPercent  = 100f
 
     override fun initView() {
 
@@ -44,6 +48,15 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
         transactionViewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
 
         observeBudget()
+
+        remainingPercent = if (budget > 0f) ((budget - spent) / budget) * 100f else 100f
+        binding.circleProgress.progress = remainingPercent
+
+        // Cập nhật TextView ở ngoài
+        binding.tvRemaining.text = "${String.format("%.2f", remainingPercent)}%"
+        Log.d("BudgetFragment", "Remaining percent: $remainingPercent")
+
+
     }
 
     override fun viewListener() {
@@ -58,33 +71,46 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
                 selectedMonth = month
                 sortByYear = sort
                 Log.d("MonthYear", "Selected: $month/$year sort by year: $sortByYear")
+                binding.tvDateTime.text = "${getMonthName(selectedMonth)}, $selectedYear"
                 transactionViewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
             }
             dialog.show()
         }
+
+        binding.imgEditBudget.setOnClickListener {
+            val dialog = EditBudgetBottomSheet(budget) { newBudget ->
+                // Cập nhật giao diện khi ngân sách thay đổi
+                binding.tvBudget.text = formatCurrency(newBudget.toDouble(),DataApp.getCurrency().country)
+                budgetViewModel.updateBudgetSpentByDate( "${selectedMonth + 1}/$selectedYear", newBudget)
+                transactionViewModel.filterTransactions(selectedMonth, selectedYear, sortByYear)
+            }
+            dialog.show(parentFragmentManager, "EditBudgetDialog")
+        }
+
     }
 
     override fun dataObservable() {
         transactionViewModel.filteredTransactions.observe(viewLifecycleOwner) { list ->
-            val spent = list
+            spent = list
                 .filter { it.type == "Expense" }
                 .sumOf { it.amount.toDouble() }
                 .toFloat()
 
-            Log.d("BudgetFragment", "Tổng chi tiêu từ filteredTransactions: $spent")
             binding.tvSpent.text = "${getString(R.string.spent)} ${formatCurrency(spent.toDouble(), DataApp.getCurrency().country)}"
+            updateRemainingProgress()
         }
+
     }
 
     private fun observeBudget() {
         budgetViewModel.getBudgetByDate("${selectedMonth + 1}/$selectedYear")
         binding.tvDateTime.text = "${getMonthName(selectedMonth)}, $selectedYear"
-        budgetViewModel.budgetByDate.observe(viewLifecycleOwner) { budget ->
-            Log.d("BudgetFragment", "Received budget: $budget")
-            // Cập nhật UI ở đây
-            binding.tvBudget.text = formatCurrency(budget.budget.toDouble(), DataApp.getCurrency().country)
-
+        budgetViewModel.budgetByDate.observe(viewLifecycleOwner) { bg ->
+            budget = bg.budget
+            binding.tvBudget.text = formatCurrency(budget.toDouble(), DataApp.getCurrency().country)
+            updateRemainingProgress()
         }
+
     }
 
     override fun onResume() {
@@ -97,4 +123,20 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
     private fun getMonthName(month: Int): String {
         return java.text.DateFormatSymbols().months[month]
     }
+
+    private fun updateRemainingProgress() {
+        if (budget > 0f) {
+            remainingPercent = ((budget - spent) / budget) * 100f
+        } else {
+            remainingPercent = 0f
+        }
+
+        // Clamp trong khoảng [0, 100]
+        remainingPercent = remainingPercent.coerceIn(0f, 100f)
+
+        binding.circleProgress.progress = remainingPercent
+        binding.tvRemaining.text = "${String.format("%.2f", remainingPercent)}%"
+        Log.d("BudgetFragment", "Remaining percent updated: $remainingPercent")
+    }
+
 }

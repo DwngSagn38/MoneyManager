@@ -43,6 +43,35 @@
             app:layout_constraintStart_toStartOf="@+id/imgBgPieChart"/>
 
         <TextView
+            android:id="@+id/tvRemaining"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_700"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:text="@string/remaining"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvRemain"/>
+
+        <TextView
+            android:id="@+id/tvRemain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_400"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:text="@string/remaining"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintTop_toTopOf="@+id/imgBgPieChart"
+            app:layout_constraintBottom_toBottomOf="@+id/imgBgPieChart"
+            app:layout_constraintEnd_toEndOf="@+id/imgBgPieChart"
+            app:layout_constraintStart_toStartOf="@+id/imgBgPieChart"/>
+
+        <TextView
             android:id="@+id/tvSpent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -105,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/available_balance"
+        android:text="@string/budget"
         android:textColor="@color/white"
         android:textSize="14sp"
         android:fontFamily="@font/opensans_600"
@@ -144,7 +173,7 @@
         app:layout_constraintEnd_toEndOf="@+id/tvBudget"/>
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imgVisible"
+        android:id="@+id/imgEditBudget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_edit1"

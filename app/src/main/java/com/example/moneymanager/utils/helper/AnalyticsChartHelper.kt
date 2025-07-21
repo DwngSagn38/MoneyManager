@@ -161,7 +161,8 @@ object AnalyticsChartHelper {
         list: List<TransactionEntity>
     ) {
         var displayedList = if (list.size > 6) list.take(6) else list
-        val adapter = Expense1Adapter(displayedList)
+        val totalAmount = list.sumOf { it.amount.toDouble() }
+        val adapter = Expense1Adapter(displayedList, totalAmount.toFloat())
 
         binding.rvExpenses1.layoutManager = GridLayoutManager(context, 2)
         binding.rvExpenses1.adapter = adapter

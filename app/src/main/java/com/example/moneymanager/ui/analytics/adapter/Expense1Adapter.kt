@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanager.R
 import com.example.moneymanager.model.TransactionEntity
 
-class Expense1Adapter(private var list: List<TransactionEntity>) :
+class Expense1Adapter(
+    private var list: List<TransactionEntity>,
+    private var totalAmount: Float
+) :
     RecyclerView.Adapter<Expense1Adapter.ViewHolder>() {
 
     // Tính tổng chi tiêu để dùng cho progress
-    private var totalAmount = list.sumOf { it.amount.toDouble() }
     fun updateData(newList: List<TransactionEntity>) {
         list = newList
         notifyDataSetChanged()
