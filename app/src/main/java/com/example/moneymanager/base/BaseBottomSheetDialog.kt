@@ -46,14 +46,21 @@ abstract class BaseBottomSheetDialog<VB : ViewBinding> : BottomSheetDialogFragme
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         setupView()
     }
     override fun getTheme(): Int {
-        return R.style.BaseDialog
+        return R.style.AppBottomSheetDialogTheme
     }
     protected abstract fun makeBinding(inflater: LayoutInflater, container: ViewGroup?): VB
 
 
     protected abstract fun setupView()
+
+    override fun onStart() {
+        super.onStart()
+
+    }
+
 }

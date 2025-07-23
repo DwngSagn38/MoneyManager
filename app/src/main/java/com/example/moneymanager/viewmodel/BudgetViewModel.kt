@@ -47,8 +47,17 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getBudgetByDate(dateTime: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val budget = dao.getBudgetByDate(dateTime) ?: BudgetModel(dateTime = dateTime, budget = 0f)
-            _budgetByDate.postValue(budget)
+            val budget = dao.getBudgetByDate(dateTime)
+            if (budget == null) {
+                val newBudget = BudgetModel(dateTime = dateTime, budget = 0f)
+                dao.insertBudget(newBudget)
+                fetchAllBudget()
+                Log.d("BudgetViewModel", "Inserted new budget: $newBudget")
+                _budgetByDate.postValue(newBudget)
+            } else {
+                Log.d("BudgetViewModel", "Found existing budget: $budget")
+                _budgetByDate.postValue(budget)
+            }
         }
     }
 
@@ -60,6 +69,7 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
                 dao.updateBudget(updated)
                 Log.d("BudgetViewModel", "Updated budget: $updated")
                 fetchAllBudget()
+                _budgetByDate.postValue(updated)
             }
         }
     }

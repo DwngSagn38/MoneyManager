@@ -15,7 +15,7 @@ interface BudgetDao {
     suspend fun getAllBudget(): List<BudgetModel>
 
     @Query("SELECT * FROM budget WHERE dateTime = :dateTime")
-    suspend fun getBudgetByDate(dateTime: String): BudgetModel
+    suspend fun getBudgetByDate(dateTime: String): BudgetModel?
 
     @Update
     suspend fun updateBudget(budget: BudgetModel)

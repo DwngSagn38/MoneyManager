@@ -4,7 +4,9 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">#CCCCCC</item>
         <item name="colorControlActivated">#FFB800</item>

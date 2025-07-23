@@ -15,6 +15,7 @@ import com.example.moneymanager.databinding.FragmentBudgetBinding
 import com.example.moneymanager.dialog.EditBudgetBottomSheet
 import com.example.moneymanager.dialog.MonthYearPickerDialog
 import com.example.moneymanager.utils.extensions.formatCurrency
+import com.example.moneymanager.utils.extensions.formatDate
 import com.example.moneymanager.view.base.BaseFragment
 import com.example.moneymanager.viewmodel.BudgetViewModel
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
@@ -70,9 +71,10 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
                 selectedYear = year
                 selectedMonth = month
                 sortByYear = sort
-                Log.d("MonthYear", "Selected: $month/$year sort by year: $sortByYear")
+                Log.d("MonthYear", "Selected: ${formatDate(selectedMonth,selectedYear)} sort by year: $sortByYear")
                 binding.tvDateTime.text = "${getMonthName(selectedMonth)}, $selectedYear"
                 transactionViewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
+                budgetViewModel.getBudgetByDate(formatDate(selectedMonth,selectedYear))
             }
             dialog.show()
         }
@@ -81,7 +83,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
             val dialog = EditBudgetBottomSheet(budget) { newBudget ->
                 // Cập nhật giao diện khi ngân sách thay đổi
                 binding.tvBudget.text = formatCurrency(newBudget.toDouble(),DataApp.getCurrency().country)
-                budgetViewModel.updateBudgetSpentByDate( "${selectedMonth + 1}/$selectedYear", newBudget)
+                budgetViewModel.updateBudgetSpentByDate( formatDate(selectedMonth,selectedYear), newBudget)
                 transactionViewModel.filterTransactions(selectedMonth, selectedYear, sortByYear)
             }
             dialog.show(parentFragmentManager, "EditBudgetDialog")
@@ -103,11 +105,12 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
     }
 
     private fun observeBudget() {
-        budgetViewModel.getBudgetByDate("${selectedMonth + 1}/$selectedYear")
+        budgetViewModel.getBudgetByDate(formatDate(selectedMonth,selectedYear))
+        Log.d("BudgetFragment", "Observing budget for ${selectedMonth + 1}/$selectedYear")
         binding.tvDateTime.text = "${getMonthName(selectedMonth)}, $selectedYear"
         budgetViewModel.budgetByDate.observe(viewLifecycleOwner) { bg ->
             budget = bg.budget
-            binding.tvBudget.text = formatCurrency(budget.toDouble(), DataApp.getCurrency().country)
+            Log.d("BudgetFragment", "Received budget: $budget")
             updateRemainingProgress()
         }
 
@@ -133,7 +136,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
 
         // Clamp trong khoảng [0, 100]
         remainingPercent = remainingPercent.coerceIn(0f, 100f)
-
+        binding.tvBudget.text = formatCurrency(budget.toDouble(), DataApp.getCurrency().country)
         binding.circleProgress.progress = remainingPercent
         binding.tvRemaining.text = "${String.format("%.2f", remainingPercent)}%"
         Log.d("BudgetFragment", "Remaining percent updated: $remainingPercent")

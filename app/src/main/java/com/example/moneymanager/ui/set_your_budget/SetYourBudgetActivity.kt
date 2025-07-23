@@ -11,6 +11,7 @@ import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.databinding.ActivitySetYourBudgetBinding
 import com.example.moneymanager.sharePreferent.PreferenceManager
 import com.example.moneymanager.ui.main.MainActivity
+import com.example.moneymanager.utils.extensions.formatDate
 import com.example.moneymanager.viewmodel.BudgetViewModel
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import java.util.Calendar
@@ -34,7 +35,7 @@ class SetYourBudgetActivity : BaseActivity<ActivitySetYourBudgetBinding>() {
         binding.btnSave.setOnClickListener {
             val budget = binding.edtBudget.text.toString()
             val calendar = Calendar.getInstance()
-            val dateTime = "${calendar.get(Calendar.MONTH) + 1}/${calendar.get(Calendar.YEAR)}"
+            val dateTime = "${formatDate(calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR))}"
             pref.saveYourBudget(true)
             viewModel.insertBudget(dateTime, budget.toFloat())
             showActivity(MainActivity::class.java)

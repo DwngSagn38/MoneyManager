@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.moneymanager.R
-import com.example.moneymanager.base.BaseActivity
+import com.example.moneymanager.base.BaseActivity2
 import com.example.moneymanager.databinding.ActivityMainBinding
 import com.example.moneymanager.ui.expense.AddTransactionActivity
 import com.example.moneymanager.ui.main.fragment_main.AnalyticsFragment
@@ -19,7 +19,7 @@ import com.example.moneymanager.ui.main.fragment_main.TransactionFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class MainActivity : BaseActivity2<ActivityMainBinding>() {
 
     override fun setViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
