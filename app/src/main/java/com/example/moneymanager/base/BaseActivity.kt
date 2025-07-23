@@ -1,6 +1,7 @@
 package com.example.moneymanager.base
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.ActivityInfo
@@ -12,12 +13,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.MediaStore
 import android.provider.Settings
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
@@ -26,6 +31,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.viewbinding.ViewBinding
 import com.example.moneymanager.R
 import com.example.moneymanager.model.Category
+import com.example.moneymanager.sound.SoundManager
 import com.example.moneymanager.utils.SystemUtil
 import com.example.moneymanager.view.dialog.PermissionDialog
 import java.util.Locale
@@ -129,6 +135,17 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
             Log.e("CRASH", "Uncaught: ${throwable.message}", throwable)
         }
 
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun vibratePhone(context: Context) {
+        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+        }
+    }
+
+    fun SoundClick(context: Context) {
+        SoundManager(context)
     }
     fun getFormatNumber(number: Double, precision: Int, decimalSeparator: Int, thousandsSeparator: Int): String {
         when (decimalSeparator) {

@@ -93,5 +93,8 @@
     <string name="october">October</string>
     <string name="november">November</string>
     <string name="december">December</string>
-
+    <string name="update">update:</string>
+    <string name="search">Search</string>
+    <string name="please_enter_a_valid_number">Please enter a valid number</string>
+    <string name="select_currency">Select Currency</string>
 </resources>
