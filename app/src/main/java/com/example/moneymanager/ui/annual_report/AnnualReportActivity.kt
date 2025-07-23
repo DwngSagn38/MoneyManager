@@ -1,9 +1,13 @@
 package com.example.moneymanager.ui.annual_report
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +23,10 @@ import com.example.moneymanager.ui.annual_category_report.MonthlyAmountAdapter
 import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.utils.helper.AnalyticsChartHelper
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import com.example.moneymanager.widget.tap
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Calendar
 
 class AnnualReportActivity : BaseActivity<ActivityAnnualReportBinding>() {
@@ -44,13 +51,53 @@ class AnnualReportActivity : BaseActivity<ActivityAnnualReportBinding>() {
         binding.tvExpenses.setOnClickListener {
             currentType = "Expense"
             loadData(currentType, category, currentYear)
+            binding.tvExpenses.setBackgroundResource(R.drawable.bg_748eff_radius)
+            binding.tvIncome.setBackgroundResource(0) // clear background
         }
 
         binding.tvIncome.setOnClickListener {
             currentType = "Income"
             loadData(currentType, category, currentYear)
+            binding.tvIncome.setBackgroundResource(R.drawable.bg_748eff_radius)
+            binding.tvExpenses.setBackgroundResource(0)
         }
+        binding.ivShare.setOnClickListener {
+            val bitmap = captureFullScreen()
+            shareBitmap(bitmap)
+        }
+
     }
+    private fun captureFullScreen(): Bitmap {
+        val view = window.decorView.rootView
+        view.isDrawingCacheEnabled = true
+        val bitmap = Bitmap.createBitmap(view.drawingCache)
+        view.isDrawingCacheEnabled = false
+        return bitmap
+    }
+    private fun shareBitmap(bitmap: Bitmap) {
+        val cachePath = File(cacheDir, "images")
+        cachePath.mkdirs()
+
+        val file = File(cachePath, "shared_image.png")
+        FileOutputStream(file).use {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
+
+        val contentUri: Uri = FileProvider.getUriForFile(
+            this,
+            "${packageName}.fileprovider",
+            file
+        )
+
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/png"
+            putExtra(Intent.EXTRA_STREAM, contentUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Share via"))
+    }
+
 
     override fun viewListener() {
         val category = intent.getSerializableExtra("CATEGORY_DATA") as? Category
@@ -65,6 +112,9 @@ class AnnualReportActivity : BaseActivity<ActivityAnnualReportBinding>() {
             currentYear += 1
             binding.tvYear.text = currentYear.toString()
             loadData(currentType, category, currentYear)
+        }
+        binding.ivBack.tap {
+            finish()
         }
     }
 

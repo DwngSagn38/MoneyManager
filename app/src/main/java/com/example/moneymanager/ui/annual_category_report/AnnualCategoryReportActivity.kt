@@ -12,6 +12,7 @@ import com.example.moneymanager.model.Category
 import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.utils.helper.AnalyticsChartHelper.setupBarChartFor12Months
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import com.example.moneymanager.widget.tap
 import kotlinx.coroutines.launch
 
 class AnnualCategoryReportActivity : BaseActivity<ActivityAnnualCategoryReportBinding>() {
@@ -64,8 +65,9 @@ class AnnualCategoryReportActivity : BaseActivity<ActivityAnnualCategoryReportBi
 
 
     override fun viewListener() {
-        // Thêm xử lý sự kiện nếu cần
-    }
+        binding.ivBack.tap {
+            finish()
+        }    }
 
     override fun dataObservable() {
         // Thêm quan sát dữ liệu nếu cần

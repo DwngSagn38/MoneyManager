@@ -30,8 +30,8 @@ class CurrencyAdapter (
 
             val previousPosition = selectedPosition
             selectedPosition = adapterPosition
-            notifyItemChanged(previousPosition)  // cập nhật item cũ
-            notifyItemChanged(selectedPosition) // cập nhật item mới
+            notifyItemChanged(previousPosition)
+            notifyItemChanged(selectedPosition)
 
             onClick.invoke(data)
         }
