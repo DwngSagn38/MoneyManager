@@ -1,6 +1,7 @@
 package com.example.moneymanager.ui.set_your_budget
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -34,11 +35,15 @@ class SetYourBudgetActivity : BaseActivity<ActivitySetYourBudgetBinding>() {
         }
         binding.btnSave.setOnClickListener {
             val budget = binding.edtBudget.text.toString()
-            val calendar = Calendar.getInstance()
-            val dateTime = "${formatDate(calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR))}"
-            pref.saveYourBudget(true)
-            viewModel.insertBudget(dateTime, budget.toFloat())
-            showActivity(MainActivity::class.java)
+            if (budget.isEmpty()) {
+                Toast.makeText(this, getString(R.string.please_enter_your_budget), Toast.LENGTH_SHORT).show()
+            }else{
+                val calendar = Calendar.getInstance()
+                val dateTime = "${formatDate(calendar.get(Calendar.MONTH),calendar.get(Calendar.YEAR))}"
+                pref.saveYourBudget(true)
+                viewModel.insertBudget(dateTime, budget.toFloat(), true, "")
+                showActivity(MainActivity::class.java)
+            }
         }
     }
 

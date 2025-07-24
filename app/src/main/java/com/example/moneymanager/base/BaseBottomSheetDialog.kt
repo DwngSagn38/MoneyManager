@@ -38,7 +38,6 @@ abstract class BaseBottomSheetDialog<VB : ViewBinding> : BottomSheetDialogFragme
             val layoutParams = it.layoutParams
             layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
             it.layoutParams = layoutParams
-
         }
 
         dialog?.window?.decorView?.setBackgroundResource(android.R.color.transparent)

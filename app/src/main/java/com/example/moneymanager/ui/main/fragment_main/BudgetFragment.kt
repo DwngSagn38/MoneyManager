@@ -2,6 +2,7 @@ package com.example.moneymanager.ui.main.fragment_main
 
 // HomeFragment.kt
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.example.moneymanager.data.DataApp
 import com.example.moneymanager.databinding.FragmentBudgetBinding
 import com.example.moneymanager.dialog.EditBudgetBottomSheet
 import com.example.moneymanager.dialog.MonthYearPickerDialog
+import com.example.moneymanager.ui.budget.BudgetDetailActivity
 import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.utils.extensions.formatDate
 import com.example.moneymanager.view.base.BaseFragment
@@ -38,6 +40,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
     private var spent = 0f
     private var budget = 0f
     private var remainingPercent  = 100f
+
 
     override fun initView() {
 
@@ -74,7 +77,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
                 Log.d("MonthYear", "Selected: ${formatDate(selectedMonth,selectedYear)} sort by year: $sortByYear")
                 binding.tvDateTime.text = "${getMonthName(selectedMonth)}, $selectedYear"
                 transactionViewModel.selectedDate.value = Triple(selectedMonth, selectedYear, sortByYear)
-                budgetViewModel.getBudgetByDate(formatDate(selectedMonth,selectedYear))
+                budgetViewModel.getBudgetByDate(formatDate(selectedMonth,selectedYear), true)
             }
             dialog.show()
         }
@@ -87,6 +90,13 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
                 transactionViewModel.filterTransactions(selectedMonth, selectedYear, sortByYear)
             }
             dialog.show(parentFragmentManager, "EditBudgetDialog")
+        }
+
+        binding.btnBudgetDetail.setOnClickListener {
+            val intent = Intent(requireContext(), BudgetDetailActivity::class.java)
+            intent.putExtra("date", formatDate(selectedMonth,selectedYear))
+            intent.putExtra("spent", spent)
+            startActivity(intent)
         }
 
     }
@@ -105,7 +115,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
     }
 
     private fun observeBudget() {
-        budgetViewModel.getBudgetByDate(formatDate(selectedMonth,selectedYear))
+        budgetViewModel.getBudgetByDate(formatDate(selectedMonth,selectedYear), true)
         Log.d("BudgetFragment", "Observing budget for ${selectedMonth + 1}/$selectedYear")
         binding.tvDateTime.text = "${getMonthName(selectedMonth)}, $selectedYear"
         budgetViewModel.budgetByDate.observe(viewLifecycleOwner) { bg ->

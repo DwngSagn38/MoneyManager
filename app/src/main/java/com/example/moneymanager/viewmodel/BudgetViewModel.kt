@@ -2,6 +2,7 @@ package com.example.moneymanager.viewmodel
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +22,9 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
     private val _allBudget = MutableLiveData<List<BudgetModel>>()
     val allBudget: LiveData<List<BudgetModel>> get() = _allBudget
 
+    private val _allBudgetByDate = MutableLiveData<List<BudgetModel>>()
+    val allBudgetByDate: LiveData<List<BudgetModel>> get() = _allBudgetByDate
+
     init {
         fetchAllBudget()
     }
@@ -32,24 +36,29 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun insertBudget(dateTime : String , budget : Float) {
+    fun insertBudget(dateTime : String , budget : Float, type : Boolean, name : String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            val budget = BudgetModel(dateTime = dateTime, budget = budget)
+            val existingBudget = dao.getBudgetByName(name!!, dateTime)
+            if (existingBudget != null) {
+                Log.d("BudgetViewModel", "Budget with name $name already exists")
+                return@launch
+            }
+            val budget = BudgetModel(dateTime = dateTime, budget = budget , type = type, name = name)
             Log.d("BudgetViewModel", "Inserting budget: $budget")
 
             dao.insertBudget(budget)
-            fetchAllBudget()
+            getListBudgetByDate(dateTime)
         }
     }
 
     private val _budgetByDate = MutableLiveData<BudgetModel>()
     val budgetByDate: LiveData<BudgetModel> get() = _budgetByDate
 
-    fun getBudgetByDate(dateTime: String) {
+    fun getBudgetByDate(dateTime: String, type : Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             val budget = dao.getBudgetByDate(dateTime)
             if (budget == null) {
-                val newBudget = BudgetModel(dateTime = dateTime, budget = 0f)
+                val newBudget = BudgetModel(dateTime = dateTime, budget = 0f, type = type)
                 dao.insertBudget(newBudget)
                 fetchAllBudget()
                 Log.d("BudgetViewModel", "Inserted new budget: $newBudget")
@@ -74,6 +83,14 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun getListBudgetByDate(dateTime: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val list = dao.getListBudgetByDate(dateTime)
+            _allBudgetByDate.postValue(list)
+            fetchAllBudget()
+        }
+
+    }
 
 
 

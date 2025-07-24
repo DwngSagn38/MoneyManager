@@ -8,4 +8,6 @@ data class BudgetModel(
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
     val dateTime : String,
     val budget : Float,
+    val type : Boolean,
+    val name : String? = null
 )
