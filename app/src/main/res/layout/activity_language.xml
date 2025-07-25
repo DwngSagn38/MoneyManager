@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@drawable/bg_main"
     android:paddingTop="25dp">
 
     <RelativeLayout
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="#373A3A"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:fontFamily="@font/opensans_700"
             android:textAlignment="center"

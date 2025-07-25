@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:textSize="22sp"
-        android:textColor="#292B2B"
+        android:textColor="@color/white"
         />
     <TextView
         app:layout_constraintTop_toBottomOf="@+id/tvContent"
@@ -36,6 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center"
-        android:textColor="#292B2B"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

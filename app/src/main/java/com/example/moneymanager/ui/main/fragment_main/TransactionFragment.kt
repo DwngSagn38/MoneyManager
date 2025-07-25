@@ -161,14 +161,14 @@ class TransactionFragment : BaseFragment<FragmentTransactionBinding>() {
     private fun setDataTotal(){
         viewModel.filteredTransactions.observe(viewLifecycleOwner) { transactions ->
             Log.d("TransactionFragment", "Filtered transactions: $transactions")
-            if (transactions.isEmpty()) {
+            val income = transactions.filter { it.type == "Income" }.sumOf { it.amount.toDouble() }
+            val expense = transactions.filter { it.type == "Expense" }.sumOf { it.amount.toDouble() }
+            if (transactions.isEmpty() || income == 0.0 && expense == 0.0) {
                 binding.llTotal.gone()
                 binding.clEmpty.visible()
             }else{
                 binding.llTotal.visible()
                 binding.clEmpty.gone()
-                val income = transactions.filter { it.type == "Income" }.sumOf { it.amount.toDouble() }
-                val expense = transactions.filter { it.type == "Expense" }.sumOf { it.amount.toDouble() }
                 val balance = income - expense
                 binding.apply {
                     tvTotalIncome.text = formatCurrency(income, DataApp.getCurrency().country)
