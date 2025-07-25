@@ -15,7 +15,8 @@ import com.example.moneymanager.utils.extensions.formatCurrency
 
 class BudgetAdapter(
     val listExpense : List<TransactionEntity>,
-    val onClick: (budget: BudgetModel, spent : Float, color : Int) -> Unit
+    val onClick: (budget: BudgetModel, spent : Float, color : Int) -> Unit,
+    val onEdit: (budget: BudgetModel) -> Unit
 ) : BaseAdapter<ItemBudgetBinding, BudgetModel>() {
     override fun createBinding(
         inflater: LayoutInflater,
@@ -67,6 +68,10 @@ class BudgetAdapter(
 
             binding.root.setOnClickListener {
                 onClick(data, spent, color)
+            }
+
+            binding.imgEditBudget.setOnClickListener {
+                onEdit(data)
             }
         }
 

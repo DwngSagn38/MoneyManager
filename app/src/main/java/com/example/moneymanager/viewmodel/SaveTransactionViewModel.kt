@@ -193,4 +193,34 @@ class SaveTransactionViewModel(application: Application) : AndroidViewModel(appl
             _twoMonthsTransactions.postValue(filtered)
         }
     }
+
+    fun filterTransactionsByDaily(day : Int, month: Int, year: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val all = dao.getAllTransactions()
+            Log.d("SaveTransacti11111", "All transactions: $all")
+
+            val filtered = all.filter { transaction ->
+                try {
+                    val parts = transaction.date.split("/") // dd/MM/yyyy
+                    if (parts.size != 3) return@filter false
+
+                    val itemDay = parts[0].toInt()
+                    val itemMonth = parts[1].toInt()
+                    val itemYear = parts[2].toInt()
+
+                    Log.d("SaveTransacti11111", "choose date: $day/${month+1}/$year")
+                    Log.d("SaveTransacti11111", "Selected date: $itemDay/$itemMonth/$itemYear")
+
+                    itemYear == year && itemMonth == (month + 1) && itemDay == day
+                } catch (e: Exception) {
+                    false
+                }
+            }
+
+            Log.d("SaveTransacti11111", "filtered: $filtered")
+
+
+            _filteredTransactions.postValue(filtered)
+        }
+    }
 }

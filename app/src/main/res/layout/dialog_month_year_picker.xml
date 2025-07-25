@@ -80,7 +80,7 @@
 
             <ImageView
                 android:id="@+id/btnPrevYear"
-                android:src="@drawable/ic_arrow_left"
+                android:src="@drawable/ic_arrow_right"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -100,7 +100,7 @@
 
             <ImageView
                 android:id="@+id/btnNextYear"
-                android:src="@drawable/ic_arrow_right"
+                android:src="@drawable/ic_arrow_left"
                 android:padding="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

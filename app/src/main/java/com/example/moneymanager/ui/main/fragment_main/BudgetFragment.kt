@@ -96,6 +96,7 @@ class BudgetFragment : BaseFragment<FragmentBudgetBinding>() {
             val intent = Intent(requireContext(), BudgetDetailActivity::class.java)
             intent.putExtra("date", formatDate(selectedMonth,selectedYear))
             intent.putExtra("spent", spent)
+            intent.putExtra("budget", budget)
             startActivity(intent)
         }
 

@@ -22,6 +22,7 @@ import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.utils.extensions.formatDate
 import com.example.moneymanager.viewmodel.BudgetViewModel
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import com.example.moneymanager.widget.gone
 import com.example.moneymanager.widget.invisible
 import com.example.moneymanager.widget.tap
 import com.example.moneymanager.widget.visible
@@ -35,8 +36,11 @@ class BudgetDetailActivity : BaseActivity<ActivityBudgetDetailBinding>() {
     private lateinit var transactionViewModel: SaveTransactionViewModel
     private var spent = 0f
     private var budget = 0f
+    private var selectedMonth = 0
+    private var selectedYear = 0
     private var date = ""
     private var remainingPercent  = 100f
+    private var remaining  = 0f
     lateinit var fullList: List<Category>
     private lateinit var adapter: BudgetAdapter
 
@@ -44,10 +48,11 @@ class BudgetDetailActivity : BaseActivity<ActivityBudgetDetailBinding>() {
         fullList = getCatagoryList(1)
         date = intent.getStringExtra("date") ?: ""
         spent = intent.getFloatExtra("spent", 0f)
+        budget = intent.getFloatExtra("budget", 0f)
         budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
         transactionViewModel = ViewModelProvider(this).get(SaveTransactionViewModel::class.java)
-        val selectedMonth = date.split("/")[0].toInt()
-        val selectedYear = date.split("/")[1].toInt()
+        selectedMonth = date.split("/")[0].toInt()
+        selectedYear = date.split("/")[1].toInt()
         transactionViewModel.filterTransactions(selectedMonth, selectedYear, true)
         observeBudget(date)
         setRecyclerView(emptyList())
@@ -58,7 +63,8 @@ class BudgetDetailActivity : BaseActivity<ActivityBudgetDetailBinding>() {
         binding.btnAddBudget.tap {
             val dialog = AddBudgetBottomSheet(
                 this@BudgetDetailActivity,
-                fullList
+                fullList,
+                remaining
             ) { budget, budgetName ->
                 budgetViewModel.insertBudget(date,budget,false, budgetName)
                 observeBudget(date)
@@ -76,7 +82,6 @@ class BudgetDetailActivity : BaseActivity<ActivityBudgetDetailBinding>() {
         budgetViewModel.getBudgetByDate(date, true)
         budgetViewModel.getListBudgetByDate(date)
         budgetViewModel.budgetByDate.observe(this) { bg ->
-            budget = bg.budget
             Log.d("BudgetFragment", "Received budget: $budget")
             updateRemainingProgress(bg.budget)
         }
@@ -94,16 +99,16 @@ class BudgetDetailActivity : BaseActivity<ActivityBudgetDetailBinding>() {
 
     private fun updateRemainingProgress(bg : Float) {
         if (bg > 0f) {
-            remainingPercent = ((bg - spent) / bg) * 100f
+            remainingPercent = ((budget - spent) / budget) * 100f
         } else {
-            remainingPercent = 0f
+            remainingPercent = 100f
         }
 
         // Clamp trong khoảng [0, 100]
         remainingPercent = remainingPercent.coerceIn(0f, 100f)
-        binding.tvTotalBudget.text = formatCurrency(bg.toDouble(), DataApp.getCurrency().country)
+        binding.tvTotalBudget.text = formatCurrency(budget.toDouble(), DataApp.getCurrency().country)
         binding.tvTotalSpent.text = formatCurrency(spent.toDouble(), DataApp.getCurrency().country)
-        binding.tvTotalRemaining.text = formatCurrency(bg.toDouble() - spent, DataApp.getCurrency().country)
+        binding.tvTotalRemaining.text = formatCurrency(budget.toDouble() - spent, DataApp.getCurrency().country)
         binding.circleProgress.progress = remainingPercent
         binding.tvRemaining.text = "${String.format("%.2f", remainingPercent)}%"
         Log.d("BudgetFragment", "Remaining percent updated: $remainingPercent")
@@ -111,21 +116,40 @@ class BudgetDetailActivity : BaseActivity<ActivityBudgetDetailBinding>() {
 
     private fun setRecyclerView(listExpense: List<TransactionEntity>) {
         Log.d("BudgetDetail123", "listExpense : $listExpense")
-        adapter = BudgetAdapter(listExpense){ budget, spent, color ->
-            val intent = Intent(this, DetailExpenseBudgetActivity::class.java)
-            intent.putExtra("budget", budget.budget)
-            intent.putExtra("name", budget.name)
-            intent.putExtra("date", date)
-            intent.putExtra("color", color)
-            intent.putExtra("spent", spent)
-            startActivity(intent)
-        }
+        adapter = BudgetAdapter(listExpense,
+            onClick = { budget, spent, color ->
+                val intent = Intent(this, DetailExpenseBudgetActivity::class.java)
+                intent.putExtra("budget", budget.budget)
+                intent.putExtra("name", budget.name)
+                intent.putExtra("date", date)
+                intent.putExtra("color", color)
+                intent.putExtra("spent", spent)
+                startActivity(intent)
+            },
+            onEdit = { budget ->
+                val dialog = EditBudgetBottomSheet(budget.budget, remaining) { newBudget ->
+                    budgetViewModel.updateBudgetSpentByDateAndName(budget.name!!, formatDate(selectedMonth - 1,selectedYear), newBudget)
+                }
+                dialog.show(supportFragmentManager, "EditBudgetDialog")
+            }
+            )
 
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
         binding.recyclerView.adapter = adapter
 
         budgetViewModel.allBudgetByDate.observe(this) {
-            adapter.addList(it.toMutableList())
+            if (it.size != 0){
+                val sp = it.sumOf { it.budget.toDouble() }
+                remaining = budget - sp.toFloat()
+                Log.d("AddBudgetBottomSheet", "remaining : $remaining")
+                adapter.addList(it.toMutableList())
+                binding.recyclerView.visible()
+            } else {
+                remaining = budget
+                Log.d("AddBudgetBottomSheet", "remaining : $remaining")
+                binding.recyclerView.invisible()
+            }
+
         }
     }
 

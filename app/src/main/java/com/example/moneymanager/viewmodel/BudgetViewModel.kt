@@ -83,6 +83,22 @@ class BudgetViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun updateBudgetSpentByDateAndName(name : String?, dateTime: String, newBudget : Float) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("BudgetViewModel", "Update budget with name: $name  ; dateTime: $dateTime    ; newBudget: $newBudget")
+            val budget = dao.getBudgetByName(name!!, dateTime)
+            Log.d("BudgetViewModel", "Find budget: $budget")
+            if (budget != null) {
+                val updated = budget.copy(budget = newBudget)
+                dao.updateBudget(updated)
+                Log.d("BudgetViewModel", "Updated budget: $updated")
+                fetchAllBudget()
+                _budgetByDate.postValue(updated)
+                getListBudgetByDate(dateTime)
+            }
+        }
+    }
+
     fun getListBudgetByDate(dateTime: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val list = dao.getListBudgetByDate(dateTime)

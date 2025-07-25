@@ -3,8 +3,10 @@ package com.example.moneymanager.ui.expense
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Toast
@@ -15,7 +17,10 @@ import com.example.moneymanager.base.BaseActivity
 import com.example.moneymanager.databinding.ActivitySaveTransactionBinding
 import com.example.moneymanager.model.Category
 import com.example.moneymanager.model.TransactionEntity
+import com.example.moneymanager.utils.extensions.formatEditText
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import com.example.moneymanager.widget.getCleanFloat
+import com.example.moneymanager.widget.hideKeyboard
 
 class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
     private val viewModel: SaveTransactionViewModel by viewModels()
@@ -77,6 +82,8 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
 
         binding.monthPicker.setOnValueChangedListener { _, _, _ -> updateDayPicker() }
         binding.yearPicker.setOnValueChangedListener { _, _, _ -> updateDayPicker() }
+
+        formatEditText(binding.edtAmount)
     }
 
     private fun updateDayPicker() {
@@ -132,14 +139,9 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
             }
 
             val note = binding.edtNote.text.toString().trim()
-            val amount = binding.edtAmount.text.toString().trim()
+            val amount = binding.edtAmount.getCleanFloat()
 
-            if (note.isEmpty()) {
-                showToast(getString(R.string.error_empty_note))
-                return@setOnClickListener
-            }
-
-            if (amount.isEmpty()) {
+            if (amount == 0f) {
                 showToast(getString(R.string.error_empty_amount))
                 return@setOnClickListener
             }
@@ -159,7 +161,7 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
                 idCategory = category.stt,
                 time = time,
                 date = date,
-                amount = amount.toFloat(),
+                amount = amount,
                 type = category.type,
                 color = category.color,
                 check = check
@@ -221,4 +223,19 @@ class SaveTransactionActivity : BaseActivity<ActivitySaveTransactionBinding>() {
 
 
     override fun dataObservable() {}
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    hideKeyboard()
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
 }

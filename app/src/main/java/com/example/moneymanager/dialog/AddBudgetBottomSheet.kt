@@ -3,6 +3,8 @@ package com.example.moneymanager.dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,11 +25,14 @@ import com.example.moneymanager.ui.annual_category_report.AnnualCategoryReportAc
 import com.example.moneymanager.ui.expense.CategoryAdapter
 import com.example.moneymanager.utils.extensions.formatCurrency
 import com.example.moneymanager.utils.extensions.formatCurrencyNotSymbol
+import com.example.moneymanager.utils.extensions.formatEditText
+import com.example.moneymanager.widget.getCleanFloat
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class AddBudgetBottomSheet(
     private val context: Context,
     private val fullList: List<Category>,
+    private val remaining : Float,
     private val onSave: (Float, String) -> Unit
 ) : BaseBottomSheetDialog<DialogAddBudgetBinding>() {
 
@@ -47,6 +52,14 @@ class AddBudgetBottomSheet(
                 showAddTransactionBottomSheet()
             }
 
+            tvBudgetName.setOnClickListener {
+                showAddTransactionBottomSheet()
+            }
+
+            img1.setOnClickListener {
+                showAddTransactionBottomSheet()
+            }
+
             btnCancel.setOnClickListener { dismiss() }
             btnSave.setOnClickListener {
                 if (tvBudgetName.text.isNullOrEmpty()){
@@ -54,14 +67,20 @@ class AddBudgetBottomSheet(
                 }else if (edtBudget.text.isNullOrEmpty()){
                     Toast.makeText(requireContext(), getString(R.string.please_enter_a_valid_number), Toast.LENGTH_SHORT).show()
                 }else{
-                    Log.d("AddBudgetBottomSheet", "Saving budget: ${edtBudget.text}")
-                    onSave(edtBudget.text.toString().toFloat(), tvBudgetName.text.toString())
-                    dismiss()
+                    val newBudget = binding.edtBudget.getCleanFloat()
+                    Log.d("AddBudgetBottomSheet", "Remaining: $remaining, Entered Budget: ${newBudget}")
+                    if (newBudget > remaining){
+                        Toast.makeText(requireContext(), getString(R.string.budget_cannot_exceed_remaining), Toast.LENGTH_SHORT).show()
+                    }else{
+                        Log.d("AddBudgetBottomSheet", "Saving budget: ${newBudget}")
+                        onSave(newBudget, tvBudgetName.text.toString())
+                        dismiss()
+                    }
                 }
             }
         }
 
-
+        formatEditText(binding.edtBudget)
 
     }
 

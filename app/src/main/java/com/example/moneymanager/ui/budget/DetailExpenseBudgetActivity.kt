@@ -82,8 +82,9 @@ class DetailExpenseBudgetActivity : BaseActivity<ActivityDetailExpenseBudgetBind
         binding.apply {
             tvTitle.text = name
             tvTotalSpent.text = formatCurrency(spent.toDouble(), DataApp.getCurrency().country)
-            tvTotalBudget.text = formatCurrency(budget.toDouble(), DataApp.getCurrency().country)
-            tvRemain.text = "${String.format("%.2f", remainingPercent)}%"
+            tvTotalBudget.text = formatCurrency((budget - spent).toDouble(), DataApp.getCurrency().country)
+            tvTotalBg.text = formatCurrency(budget.toDouble(), DataApp.getCurrency().country)
+            tvRemain.text = getString(R.string.remaining) + "\n${String.format("%.2f", remainingPercent)}%"
         }
 
 

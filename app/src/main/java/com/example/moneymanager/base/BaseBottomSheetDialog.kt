@@ -40,12 +40,12 @@ abstract class BaseBottomSheetDialog<VB : ViewBinding> : BottomSheetDialogFragme
             it.layoutParams = layoutParams
         }
 
-        dialog?.window?.decorView?.setBackgroundResource(android.R.color.transparent)
-        dialog?.window?.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+//        dialog?.window?.decorView?.setBackgroundResource(android.R.color.transparent)
+//        dialog?.window?.setFlags(
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//        )
+//        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         setupView()
     }

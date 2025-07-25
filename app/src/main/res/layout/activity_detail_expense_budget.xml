@@ -80,6 +80,35 @@
                 app:layout_constraintTop_toBottomOf="@+id/bgPie"
                 app:layout_constraintBottom_toBottomOf="parent">
                 <TextView
+                    android:id="@+id/tvBg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_700"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:text="@string/budget"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="30dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvTotalBg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_700"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:text="22222"
+                    android:textAlignment="center"
+                    android:textColor="#00FF6F"
+                    android:layout_marginEnd="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvBg"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvBg"/>
+
+                <TextView
                     android:id="@+id/tvSpent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -90,8 +119,9 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:layout_marginStart="30dp"
+                    android:layout_marginTop="6dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@+id/tvBg"/>
 
                 <TextView
                     android:id="@+id/tvTotalSpent"
@@ -111,10 +141,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     app:layout_constraintTop_toBottomOf="@+id/tvTotalSpent"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="24dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

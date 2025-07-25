@@ -17,6 +17,7 @@ import com.example.moneymanager.ui.main.fragment_main.BudgetFragment
 import com.example.moneymanager.ui.main.fragment_main.HomeFragment
 import com.example.moneymanager.ui.main.fragment_main.TransactionFragment
 import com.example.moneymanager.viewmodel.SaveTransactionViewModel
+import com.example.moneymanager.widget.visible
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class MainActivity : BaseActivity2<ActivityMainBinding>() {
@@ -35,15 +36,23 @@ class MainActivity : BaseActivity2<ActivityMainBinding>() {
 
         binding.clHome.setOnClickListener {
             openFragment(HomeFragment())
+            setColorDefault().also { binding.imgHome.setColorFilter(Color.parseColor("#FFFFFF")) }
+            setVisibilityDot().also { binding.icDotHome.visible() }
         }
         binding.clAnalytics.setOnClickListener {
             openFragment(AnalyticsFragment())
+            setColorDefault().also { binding.imgAnalytics.setColorFilter(Color.parseColor("#FFFFFF")) }
+            setVisibilityDot().also { binding.icDotAnalytics.visible() }
         }
         binding.clBudget.setOnClickListener {
             openFragment(BudgetFragment())
+            setColorDefault().also { binding.imgBudget.setColorFilter(Color.parseColor("#FFFFFF")) }
+            setVisibilityDot().also { binding.icDotBudget.visible() }
         }
         binding.clTransaction.setOnClickListener {
             openFragment(TransactionFragment())
+            setColorDefault().also { binding.imgTransaction.setColorFilter(Color.parseColor("#FFFFFF")) }
+            setVisibilityDot().also { binding.icDotTransaction.visible() }
         }
         binding.icAddTransaction.setOnClickListener {
             showAddTransactionBottomSheet()
@@ -97,6 +106,20 @@ class MainActivity : BaseActivity2<ActivityMainBinding>() {
         }
 
         dialog.show()
+    }
+
+    private fun setColorDefault() {
+        binding.imgHome.setColorFilter(Color.parseColor("#6E97FF"))
+        binding.imgAnalytics.setColorFilter(Color.parseColor("#6E97FF"))
+        binding.imgBudget.setColorFilter(Color.parseColor("#6E97FF"))
+        binding.imgTransaction.setColorFilter(Color.parseColor("#6E97FF"))
+    }
+
+    private fun setVisibilityDot() {
+        binding.icDotHome.visibility = View.GONE
+        binding.icDotAnalytics.visibility = View.GONE
+        binding.icDotBudget.visibility = View.GONE
+        binding.icDotTransaction.visibility = View.GONE
     }
 
 
